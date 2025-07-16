@@ -1,10 +1,10 @@
 # LukeRobotArm
-Luke is a low cost robot arm for your home, garage, kitchen or workbench to help you out doing simple tasks. It on the esp32 ttgo t-display arduino device that is built in and you control the robot with your phone or laptop using voice, camera, controls and machine learning (AI) via the web app. Or use one of the programming examples (Python/C#/..)
+Luke is a low cost robot arm for your home, garage, kitchen or workbench to help you out doing simple tasks. It runs on the esp32 ttgo t-display arduino device that is built in and you control the robot with your phone or laptop using voice, camera, controls and machine learning (AI) via the web app. Or use one of the programming examples (Python/C#/..)
 
 Find out more at [LukeRobotArm.com](https://lukerobotarm.com) and get yours today!
 
 ## Server
-Luke Robot Arm Server on TTGO T-Display ESP32 Arduino Project. This is the heart of the robot arm, it is the server that controls the robot arm and communicates with the phone app. It is pretty dumb, low power and can stay on all the time. It just follows the instructions you give it, all the fancy stuff happens on the website app.
+Luke Robot Arm Server on TTGO T-Display ESP32 Arduino Project. This is the heart of the robot arm, it is the server that controls the robot arm and communicates with the phone app. It is pretty dumb, low power and can stay on all the time. It just follows the instructions you give it, all the fancy stuff happens on the website app:
 
 ## LukeRobotArm.com
 Website to control the robot arm, usually launched from a phone (Android or iOS), but can be also used from your laptop or PC (Windows, Mac, Linux) to control Luke.
