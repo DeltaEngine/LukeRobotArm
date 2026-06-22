@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ArUco Marker Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .marker {
+            background: white;
+            padding: 20px;
+            margin: 20px;
+            border: 2px solid #333;
+            display: inline-block;
+        }
+        .marker-grid {
+            display: inline-block;
+            border: 2px solid black;
+        }
+        .marker-row {
+            display: flex;
+        }
+        .marker-cell {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #ccc;
+        }
+        .black { background: black; }
+        .white { background: white; }
+        .instructions {
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>ArUco Marker Generator for Luke Robot Arm</h1>
+    
+    <div class="instructions">
+        <h2>Instructions:</h2>
+        <ol>
+            <li>Print the marker below at actual size (should be about 6cm x 6cm)</li>
+            <li>Mount it securely on your robot arm where the camera can see it</li>
+            <li>Ensure good lighting and contrast</li>
+            <li>Go to the Camera page and test detection</li>
+        </ol>
+        <p><strong>Marker ID: 6</strong> (4x4 ArUco Dictionary)</p>
+    </div>    <div class="marker">
+        <h3>ArUco Marker ID: 6 (Print this)</h3>
+        <div class="marker-grid" id="marker6">
+            <!-- Will be filled by JavaScript -->
+        </div>
+        <p>Size: 6x6 grid (print at ~8cm actual size)</p>
+    </div>
+
+    <div class="marker">
+        <h3>Test Pattern (Try this if above doesn't work)</h3>
+        <div class="marker-grid" id="markerTest">
+            <!-- Will be filled by JavaScript -->
+        </div>
+        <p>Size: 6x6 grid (simpler pattern for testing)</p>
+    </div><script>
+        // Real ArUco marker ID 6 pattern for js-aruco (4x4 dictionary)
+        // This is the correct pattern for ArUco 4x4_50 dictionary, ID 6
+        const markerPattern6 = [
+            [1, 1, 1, 1, 1, 1],
+            [1, 0, 1, 1, 0, 1],
+            [1, 1, 0, 0, 1, 1], 
+            [1, 0, 1, 0, 0, 1],
+            [1, 1, 0, 1, 1, 1],
+            [1, 1, 1, 1, 1, 1]
+        ];
+
+        // Also create a simple test pattern
+        const simpleTestPattern = [
+            [1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 1, 1, 1],
+            [1, 0, 1, 0, 1, 1], 
+            [1, 1, 0, 1, 0, 1],
+            [1, 1, 1, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1]
+        ];
+
+        function generateMarker(pattern, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            pattern.forEach(row => {
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'marker-row';
+                
+                row.forEach(cell => {
+                    const cellDiv = document.createElement('div');
+                    cellDiv.className = `marker-cell ${cell ? 'black' : 'white'}`;
+                    rowDiv.appendChild(cellDiv);
+                });
+                
+                container.appendChild(rowDiv);
+            });
+        }
+
+        generateMarker(markerPattern6, 'marker6');
+        generateMarker(simpleTestPattern, 'markerTest');
+    </script>
+
+    <div class="instructions">
+        <h2>Alternative: Use Online Generator</h2>
+        <p>For guaranteed compatibility, you can also generate markers online:</p>
+        <ul>
+            <li><a href="https://chev.me/arucogen/" target="_blank">ArUco Generator</a> - Select "4x4" dictionary, ID "6"</li>
+            <li><a href="https://calib.io/pages/camera-calibration-pattern-generator" target="_blank">Calib.io Generator</a></li>
+        </ul>
+    </div>
+
+    <style media="print">
+        body * { visibility: hidden; }
+        .marker, .marker * { visibility: visible; }
+        .marker { position: absolute; top: 0; left: 0; }
+    </style>
+</body>
+</html>

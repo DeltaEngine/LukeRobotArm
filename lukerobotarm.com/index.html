@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luke Robot Arm Controller</title>
+  <link rel="icon" type="image/x-icon" href="/Luke.ico">
+  <link rel="apple-touch-icon" href="/Luke.png">
+  <link rel="stylesheet" href="/style.css">
+  <!-- Uncomment the line below to use OpenCV.js instead of js-aruco -->
+  <!-- <script async src="https://docs.opencv.org/4.5.0/opencv.js" type="text/javascript"></script> -->
+</head>
+<body>
+  <div class="page-container">
+    <header class="header-row">
+      <img src="/Luke.png" alt="Robot Logo" class="logo" />
+      <h1>Luke Robot Arm</h1>
+    </header>
+    <div class="layout">
+      <nav class="menu">
+        <button id="overviewBtn"><img src="/Overview.png" alt="Overview" class="menu-icon"> Overview</button>
+        <button id="connectBtn"><img src="/Connect.png" alt="Connect" class="menu-icon"> Connect</button>
+        <button id="controllerBtn"><img src="/Control.png" alt="Controller" class="menu-icon"> Controller</button>
+        <button id="voiceBtn"><img src="/Voice.png" alt="Voice" class="menu-icon"> Voice</button>
+        <button id="cameraBtn"><img src="/Camera.png" alt="Camera" class="menu-icon"> Camera</button>
+        <button id="modulesBtn"><img src="/Modules.png" alt="Modules" class="menu-icon"> Modules</button>
+        <button id="guidesBtn"><img src="/Guides.png" alt="Guides" class="menu-icon"> Guides</button>
+        <button id="shopBtn"><img src="/Shop.png" alt="Shop" class="menu-icon"> Shop</button>
+      </nav>
+      <main class="content">
+        <div class="command">
+          <input id="commandInput" type="text" placeholder="Enter command..." />
+          <button id="sendBtn">Send</button>
+        </div>
+        <pre id="output"></pre>
+      </main>
+    </div>
+    <footer>
+      <p>&copy; 2026 Delta Engine GmbH - <a href="https://deltaengine.net/About/Imprint" target="_blank">Imprint</a></p>
+    </footer>
+  </div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

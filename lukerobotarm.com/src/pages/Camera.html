@@ -1,0 +1,118 @@
+<h2>Camera - AprilTag Detection</h2>
+<div class="camera-container">
+  <video id="cameraVideo" autoplay playsinline></video>
+  <canvas id="cameraCanvas"></canvas>
+  <div id="tagInfo" class="tag-info">
+    <h3>Robot Arm Position</h3>
+    <div id="tagStatus">No AprilTag detected</div>
+    <div id="tagDetails"></div>
+  </div>
+</div>
+
+<div class="camera-controls">
+  <button id="startCamera">Start Camera</button>
+  <button id="stopCamera">Stop Camera</button>
+  <button id="toggleFlash">Toggle Flash</button>
+  <button id="switchDetection">Switch Detection Method</button>
+  <button id="testLibrary">Test js-aruco Library</button>
+  <button id="tryOpenCV">Try OpenCV.js</button>
+</div>
+
+<div class="instructions">
+  <h3>Instructions</h3>  <p>1. Point your phone camera at the robot arm</p>
+  <p>2. Ensure the ArUco marker on the robot is visible and well-lit</p>
+  <p>3. The system will detect ArUco markers and show their position relative to your phone</p>
+  <p>4. Use the position data to give precise pickup instructions</p>  <p><strong>Note:</strong> Print an ArUco marker from <a href="https://chev.me/arucogen/" target="_blank">ArUco Generator</a> and attach it to your robot arm</p>
+  <p><strong>Quick Test:</strong> <a href="/aruco-marker-generator.html" target="_blank">Generate Test Markers</a> or use the button below to try a different detection method</p>
+</div>
+
+<style>
+.camera-container {
+  position: relative;
+  max-width: 100%;
+  margin: 1rem 0;
+}
+
+#cameraVideo {
+  width: 100%;
+  max-width: 640px;
+  height: auto;
+  border: 2px solid #333;
+  border-radius: 8px;
+}
+
+#cameraCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  max-width: 640px;
+  height: auto;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.tag-info {
+  background: #404040;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+#tagStatus {
+  font-weight: bold;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+#tagStatus.detected {
+  color: #28a745;
+}
+
+#tagDetails {
+  font-family: monospace;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.camera-controls {
+  margin: 1rem 0;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.camera-controls button {
+  padding: 0.5rem 1rem;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.camera-controls button:hover {
+  background: #0056b3;
+}
+
+.camera-controls button:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+}
+
+.instructions {
+  background: #494c4f;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.instructions h3 {
+  margin-top: 0;
+}
+
+.instructions p {
+  margin: 0.5rem 0;
+}
+</style>
