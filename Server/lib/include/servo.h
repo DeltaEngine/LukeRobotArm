@@ -4,11 +4,11 @@
 #include "Preferences.h"
 
 namespace lukeRobot {
-    using namespace Constants;
-    class Servo {
-        public:
-        Servo();
-        bool calibServos;
+	using namespace Constants;
+	class Servo {
+public:
+		Servo();
+		bool calibServos;
 		uint8_t numberOfServos = 0;
 		uint16_t servoOneVelocity = 2 * Constants::TARGET_VELOCITY_STEPS;
 		uint16_t servoOneAcceleration = 2 * Constants::TARGET_ACCELERATION;
@@ -27,7 +27,7 @@ namespace lukeRobot {
 			};
 		ServoParameters servoInfo[5];
 
-        bool begin(Constants::GripperType GripperType);
+				bool begin(Constants::GripperType GripperType);
 		bool serial2Setup();
 		void moveJoint(byte id, int position, int speed = TARGET_VELOCITY_STEPS);
 		void moveJoints(byte numberofServos, byte id[], int position[], int speed[]);
@@ -37,8 +37,8 @@ namespace lukeRobot {
 		 */
 		bool calibrateServos();
 
-        private:
-        Preferences _preferences;
-        void waitForServotoStop(byte id);
-    };
+private:
+		Preferences _preferences;
+		void waitForServotoStop(byte id);
+	};
 }

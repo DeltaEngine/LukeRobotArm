@@ -9,11 +9,8 @@ namespace lukeRobot {
 	class Luke
 	{
 	public:
-
 		float thetaOne = 0, thetaTwo = 0, displacementZ = 0;
 		float requiredX = 350, requiredY = 0, requiredZ = 150;
-
-		
 		Adafruit_NeoPixel strip;
 
 		/**
@@ -94,7 +91,6 @@ namespace lukeRobot {
 		 */
 		float getPosition(byte id);
 
-		
 	private:
 		DcMotor _dcMotor;
 		Servo _servo;
