@@ -1,2 +1,35 @@
 <h2>Voice</h2>
-<p>This is the voice page. Add voice control features here.</p>
+<p>
+  Control Luke with your voice from the browser. Speech recognition runs on your device;
+  recognized phrases are sent to the robot over the WebSocket connection.
+</p>
+
+<section class="content-section">
+  <h3>Connection</h3>
+  <div id="voiceConnect"></div>
+</section>
+
+<section class="content-section">
+  <h3>Listen</h3>
+  <p class="hint">
+    Works best in Chrome / Edge on desktop and Android. iOS Safari support is limited.
+    Allow microphone access when prompted.
+  </p>
+  <div class="button-row">
+    <button type="button" id="startVoiceBtn" class="btn-primary">🎤 Start listening</button>
+    <button type="button" id="stopVoiceBtn" class="btn-secondary">Stop</button>
+  </div>
+  <div class="voice-status" id="voiceStatus">Idle</div>
+  <div class="voice-transcript" id="voiceTranscript">Say something like “move left”, “open gripper”, or “home”.</div>
+</section>
+
+<section class="content-section">
+  <h3>Example phrases</h3>
+  <ul class="feature-list">
+    <li>“Home” / “Reset”</li>
+    <li>“Open gripper” / “Close gripper”</li>
+    <li>“Move left” / “Move right” / “Move forward” / “Move back”</li>
+    <li>“Stop”</li>
+    <li>Any custom phrases your firmware or AI layer understands</li>
+  </ul>
+</section>

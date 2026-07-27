@@ -1,2 +1,66 @@
 <h2>Controller</h2>
-<p>This is the controller page. Add control options here.</p>
+<p>
+  Control Luke from your phone or PC — virtual joints, quick moves, raw commands, and playback of
+  recorded motions (as on the original LukeRobotArm.com controller).
+</p>
+
+<section class="content-section">
+  <h3>Connection</h3>
+  <p class="hint">
+    Make sure the robot is powered on and on the same Wi‑Fi. For manual IP entry, use the fields below.
+  </p>
+  <div id="controllerConnect"></div>
+</section>
+
+<section class="content-section">
+  <h3>Joint control</h3>
+  <div class="joint-table" id="jointTable"></div>
+  <div class="button-row">
+    <button type="button" id="sendJointsBtn" class="btn-primary">Send joint pose</button>
+    <button type="button" id="homeBtn" class="btn-secondary">Home / reset</button>
+    <button type="button" id="openGripBtn" class="btn-secondary">Open gripper</button>
+    <button type="button" id="closeGripBtn" class="btn-secondary">Close gripper</button>
+  </div>
+</section>
+
+<section class="content-section">
+  <h3>Quick moves</h3>
+  <div class="pad-grid">
+    <button type="button" class="pad-btn" data-move="forward">↑ Forward</button>
+    <button type="button" class="pad-btn" data-move="left">← Left</button>
+    <button type="button" class="pad-btn" data-move="stop">■ Stop</button>
+    <button type="button" class="pad-btn" data-move="right">Right →</button>
+    <button type="button" class="pad-btn" data-move="back">↓ Back</button>
+    <button type="button" class="pad-btn" data-move="up">Z ↑</button>
+    <button type="button" class="pad-btn" data-move="down">Z ↓</button>
+  </div>
+</section>
+
+<section class="content-section">
+  <h3>Raw command</h3>
+  <div class="command">
+    <input id="commandInput" type="text" placeholder="Enter command…" />
+    <button type="button" id="sendBtn" class="btn-primary">Send</button>
+  </div>
+</section>
+
+<section class="content-section">
+  <h3>Play recorded moves</h3>
+  <p>
+    Load a saved motion sequence and play it back on the connected Luke
+    (same idea as the “Play Recorded Moves” page on the classic site).
+  </p>
+  <div class="player">
+    <div class="connection-row">
+      <input id="playerHost" type="text" placeholder="Robot IP" />
+      <button type="button" id="playerConnectBtn" class="btn-primary">Connect</button>
+      <button type="button" id="playerResetBtn" class="btn-secondary">Reset robot</button>
+    </div>
+    <div class="player-actions">
+      <input id="moveFile" type="file" accept=".json,.txt,.csv" />
+      <button type="button" id="playMoveBtn" class="btn-primary">▶ Play</button>
+      <button type="button" id="stopMoveBtn" class="btn-secondary">■ Stop</button>
+    </div>
+    <pre id="movePreview" class="robot-log">No sequence loaded.</pre>
+  </div>
+</section>

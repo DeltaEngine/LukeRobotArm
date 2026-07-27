@@ -1,2 +1,56 @@
 <h2>Connect</h2>
-<p>This is the connect page. Add connection instructions here.</p>
+<p>
+  Connect this browser to your Luke robot over the local network. Your phone or PC must be on the
+  <strong>same Wi‑Fi</strong> as the arm.
+</p>
+
+<section class="content-section">
+  <h3>First-time Wi‑Fi setup</h3>
+  <ol class="steps">
+    <li>
+      Power on Luke. It creates a Wi‑Fi access point named <code>Luke-&lt;id&gt;</code>
+      if it cannot join a known network.
+    </li>
+    <li>
+      Connect your phone or laptop to that AP. The captive portal should open automatically;
+      otherwise go to <code>http://192.168.4.1</code>.
+    </li>
+    <li>
+      Enter your home or workshop Wi‑Fi credentials so Luke can talk to your devices on that network.
+    </li>
+    <li>
+      Switch back to your normal Wi‑Fi, then use the panel below to connect to Luke’s IP.
+    </li>
+  </ol>
+  <p class="note">
+    Tip: you can also open <code>http://Luke</code> or the IP shown on the robot display (if equipped)
+    while on the same network.
+  </p>
+</section>
+
+<section class="content-section">
+  <h3>Connect to Luke</h3>
+  <p>
+    No Lukes were auto-discovered yet — make sure the robot is powered on and on the same Wi‑Fi.
+    You can enter the IP manually below (same as the classic LukeRobotArm.com controller).
+  </p>
+  <div id="connectPanel"></div>
+  <div class="button-row">
+    <button type="button" id="statusBtn" class="btn-secondary">Request status</button>
+    <button type="button" id="reconnectBtn" class="btn-primary">Reconnect</button>
+  </div>
+</section>
+
+<section class="content-section">
+  <h3>What runs where?</h3>
+  <p>
+    The <strong>server</strong> on the ESP32 is the heart of the arm: low power, always on, and
+    deliberately simple. It follows the instructions you send. All of the smarter UI —
+    voice, camera, AI, and this website — runs in your browser (phone, tablet, or PC).
+  </p>
+  <p>
+    Developers can flash custom firmware with PlatformIO; see the
+    <a href="https://github.com/DeltaEngine/LukeRobotArm" target="_blank" rel="noopener">GitHub repo</a>
+    and the Guides page for programming examples (Python, C#, JS, and more).
+  </p>
+</section>

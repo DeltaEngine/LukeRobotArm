@@ -1,21 +1,13 @@
 // ArUco detection using js-aruco library or fallback to manual detection
 // @ts-ignore
 import { AR, CV } from 'js-aruco';
+import html from './Camera.html?raw';
+import { loadPage } from './loadPage';
 
 export default function Camera() {
-  const container = document.createElement('div');
-  
-  // Load the HTML content
-  fetch('/src/pages/Camera.html')
-    .then(res => res.text())
-    .then(html => {
-      container.innerHTML = html;
-      initializeCamera();
-    })
-    .catch(() => {
-      container.innerHTML = '<h2>Camera</h2><p>Error loading camera page</p>';
-    });
-
+  const container = loadPage(html, 'page camera-page');
+  // Defer so the nodes are in the document tree before getElementById runs
+  queueMicrotask(() => initializeCamera());
   return container;
 }
 

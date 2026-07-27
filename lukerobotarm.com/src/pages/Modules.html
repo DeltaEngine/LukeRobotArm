@@ -1,2 +1,75 @@
 <h2>Modules</h2>
-<p>This is the modules page. Add module information here.</p>
+<p>
+  Luke is modular — start with the standard arm and expand with grippers, cameras, and software
+  modules that plug into this web app.
+</p>
+
+<section class="content-section">
+  <h3>Mechanics</h3>
+  <p>
+    Luke belongs to the SCARA family with a standard <strong>RPRR</strong> configuration.
+    It can be configured as <strong>RPRRR</strong> by replacing the 1‑DOF hand with a 2‑DOF hand
+    that adds twist, so the gripper can rotate about its gripping axis.
+  </p>
+  <div class="card-grid">
+    <article class="info-card">
+      <h4>Base + arm</h4>
+      <p>Rotary base and planar arm links for fast horizontal reach — classic SCARA strengths for pick-and-place.</p>
+    </article>
+    <article class="info-card">
+      <h4>Z column</h4>
+      <p>Vertical displacement for height changes over the work surface.</p>
+    </article>
+    <article class="info-card">
+      <h4>Wrist &amp; gripper</h4>
+      <p>Optional twist module and interchangeable end effectors for gripping everyday objects.</p>
+    </article>
+  </div>
+</section>
+
+<section class="content-section">
+  <h3>Electronics &amp; server</h3>
+  <p>
+    The on-board <strong>ESP32</strong> server drives the motors, runs calibration, and exposes a
+    WebSocket API. It is intentionally “dumb” and low power so it can stay on all the time —
+    all the fancy interaction happens in this website.
+  </p>
+  <ul class="feature-list">
+    <li>Wi‑Fi setup via captive portal (<code>Luke-&lt;id&gt;</code> AP)</li>
+    <li>OTA firmware updates once on your network</li>
+    <li>USB‑C for programming (12 V supply still required for motors)</li>
+    <li>Open firmware via PlatformIO in the
+      <a href="https://github.com/DeltaEngine/LukeRobotArm" target="_blank" rel="noopener">GitHub repo</a>
+    </li>
+  </ul>
+</section>
+
+<section class="content-section">
+  <h3>Software modules (this app)</h3>
+  <div class="card-grid">
+    <article class="info-card">
+      <h4>Controller</h4>
+      <p>Joint sliders, quick moves, raw commands, and recorded-move playback.</p>
+    </article>
+    <article class="info-card">
+      <h4>Voice</h4>
+      <p>Browser speech recognition that streams phrases to the robot.</p>
+    </article>
+    <article class="info-card">
+      <h4>Camera</h4>
+      <p>ArUco / AprilTag-style marker detection for position-aware tasks from your phone camera.</p>
+    </article>
+    <article class="info-card">
+      <h4>AI / ML</h4>
+      <p>Hook generative AI and custom models through the same web control path — no native app install required.</p>
+    </article>
+  </div>
+</section>
+
+<section class="content-section">
+  <h3>Programming interfaces</h3>
+  <p>
+    Beyond this UI you can drive Luke from Python, C#, JavaScript, C++, and other languages.
+    Start from the examples in the Guides section and the project wiki.
+  </p>
+</section>

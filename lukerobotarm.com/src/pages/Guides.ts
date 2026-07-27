@@ -1,5 +1,6 @@
+import html from './Guides.html?raw';
+import { loadPage } from './loadPage';
+
 export default function Guides() {
-  const container = document.createElement('div');
-  container.innerHTML = `<h2>Guides</h2><p>This is the guides page. Add guides and tutorials here.</p>`;
-  return container;
+  return loadPage(html, 'page guides-page');
 }

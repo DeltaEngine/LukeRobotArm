@@ -1,19 +1,100 @@
-<video src="/LukeIntro.mp4" controls></video>
-<p>Luke is a low cost robot arm for your home, garage, kitchen or workbench to help you out doing simple tasks. </p>
-<p>Find out more at <a href="https://lukerobotarm.com">LukeRobotArm.com</a> and get yours today!</p>
+<section class="hero">
+  <video id="hero-video" autoplay muted loop playsinline poster="/LukeRobotPhoto.jpg">
+    <source src="/LukeIntro.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+  <div class="hero-content">
+    <h2>Meet Luke</h2>
+    <p>Your low-cost personal robot arm for home, garage, kitchen, or workbench.</p>
+    <a href="#connect" class="cta-button" data-nav="connect">Get started in 3 steps</a>
+  </div>
+</section>
 
-<h3>Shop</h3>
-Buy a Kirsten today!
+<section class="content-section product-intro">
+  <div class="product-card">
+    <img src="/LukeRobotPhoto.jpg" alt="Luke Robot Arm" />
+    <h3>What is Luke?</h3>
+    <p>
+      Have you ever wondered how a robot would look in your home? Most robots out there are
+      expensive or too complex. Meet <strong>Luke</strong> — your personal assistant.
+      Integrated with generative AI, you can automate repetitive tasks with ease.
+      Use the online controller and get started in three simple steps today.
+    </p>
+    <p>
+      Luke is a low-cost robot arm for your home, garage, kitchen, or workbench to help with
+      simple tasks. It runs on a built-in ESP32 and you control it from your phone or laptop
+      using voice, camera, gamepad, on-screen controls, or AI via this web app.
+    </p>
+  </div>
+</section>
 
-<h3>Controller</h3>
-<p>Website to control the robot arm, usually launched from a phone (Android or iOS), but can be also used from your laptop or PC (Windows, Mac, Linux) to control Luke.</p>
-<h3>LukeRobotArm.com</h3>
-<p>If you just want to use your Luke Robot Arm, you don't have to download anything, just go to [LukeRobotArm.com](https://lukerobotarm.com) and follow the instructions.</p>
+<section class="content-section">
+  <h3>Why Luke?</h3>
+  <p>
+    Industry has struggled to deliver low-cost automation since robotics first arrived.
+    Luke helps solve automation at an affordable price. Whether you are a hobbyist, tech
+    enthusiast, or professional, Luke provides ready-made examples, high-level control —
+    and if you want to go deep, full low-level access too.
+  </p>
+  <ul class="feature-list">
+    <li><strong>Voice control</strong> — speak natural commands from your phone or PC</li>
+    <li><strong>Camera / markers</strong> — detect ArUco markers for position-aware tasks</li>
+    <li><strong>Controller</strong> — virtual joysticks, joint sliders, and gamepad support</li>
+    <li><strong>Recorded moves</strong> — play back saved motion sequences</li>
+    <li><strong>AI-ready</strong> — generative AI and ML workflows via the web app</li>
+    <li><strong>Open firmware</strong> — ESP32 server you can reflash and customize</li>
+  </ul>
+</section>
 
-1. Connect to the Luke-<id> wifi and open http://Luke or http://192.168.100.1, there you can enter your local wifi credentials so the robot can talk to your phone.
-2. Go back to your wifi and connect to Luke-<id> that should appear on https://LukeRobotArm.com
-3. Once connected you can control the robot with your phone or laptop using voice, camera, controls and machine learning (AI).
+<section class="content-section">
+  <h3>Quick start</h3>
+  <ol class="steps">
+    <li>
+      Connect to the <code>Luke-&lt;id&gt;</code> Wi‑Fi. The sign-in page should open automatically,
+      or open <code>http://192.168.4.1</code> and enter your local Wi‑Fi credentials so the robot
+      can reach your phone.
+    </li>
+    <li>
+      Rejoin your normal Wi‑Fi, then open this site and use
+      <strong>Connect</strong> to find <code>Luke-&lt;id&gt;</code>.
+    </li>
+    <li>
+      Once connected, control the arm with voice, camera, a gamepad, virtual controls, or AI.
+    </li>
+  </ol>
+  <p class="note">
+    On first power-up, keep the area around the robot clear. Calibration moves each joint to its
+    extremes. On every power cycle the arm goes all the way down to re-zero — make sure nothing
+    is underneath.
+  </p>
+  <p>
+    <a href="#guides" data-nav="guides">Full setup guides →</a>
+    &nbsp;·&nbsp;
+    <a href="https://github.com/DeltaEngine/LukeRobotArm/wiki" target="_blank" rel="noopener">Wiki</a>
+  </p>
+</section>
 
+<section class="content-section about">
+  <h3>About us</h3>
+  <p>
+    We are a team of passionate engineers and innovators dedicated to pushing the boundaries of
+    robotics technology. Our mission is to create intelligent machines that enhance human lives.
+  </p>
+  <p>
+    Luke is built by <a href="https://deltaengine.net" target="_blank" rel="noopener">Delta Engine GmbH</a>.
+    The open-source firmware and docs live on
+    <a href="https://github.com/DeltaEngine/LukeRobotArm" target="_blank" rel="noopener">GitHub</a>.
+  </p>
+</section>
 
-<h3>Server</h3>
-<p>Luke Robot Arm Server on TTGO T-Display ESP32 Arduino Project. This is the heart of the robot arm, it is the server that controls the robot arm and communicates with the phone app. It runs on the esp32 ttgo t-display arduino device that is built in and you control the robot with your phone or laptop using voice, camera, controls and machine learning (AI) via the web app. Or use one of the programming <a href="/guides">examples</a> (Python/C#/..). It is pretty dumb, low power and can stay on all the time. It just follows the instructions you give it, all the fancy stuff happens on this website.</p>
+<section class="content-section contact">
+  <h3>Contact us</h3>
+  <p>
+    Ready to take your projects to the next level with Luke? Get in touch with us today —
+    or head to the shop when you are ready to order.
+  </p>
+  <div class="cta-row">
+    <a href="https://deltaengine.net/About/Imprint" target="_blank" rel="noopener" class="cta-button">Contact / Imprint</a>
+    <a href="#shop" class="cta-button secondary" data-nav="shop">View shop</a>
+  </div>
+</section>

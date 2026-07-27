@@ -1,77 +1,81 @@
 <h2>Shop</h2>
-<p>This is the shop page. Add shop items here.</p>
+<p>
+  Choose the Luke that fits your workspace. Prices below are target list prices in USD;
+  VAT/taxes and shipping are added at checkout depending on your country.
+</p>
 
+<section class="product-grid">
+  <article class="shop-card featured">
+    <img src="/LukeRobotPhoto.jpg" alt="Luke Pro Robot Arm" />
+    <h3>Luke Pro</h3>
+    <p class="price">$899</p>
+    <p class="tag">Flagship build</p>
+    <p>
+      The full-quality arm we show to reviewers — top-notch parts including Feetech 3250-class
+      motors. Best performance and finish for demos, labs, and demanding daily use.
+    </p>
+    <ul>
+      <li>Premium actuators &amp; build quality</li>
+      <li>Full feature set &amp; web controller</li>
+      <li>Limited early production batches</li>
+    </ul>
+    <a class="cta-button" href="mailto:info@deltaengine.net?subject=Luke%20Pro%20inquiry">Inquire</a>
+  </article>
 
-Ben, [2025-07-21 12:08]
-pricing is hard
+  <article class="shop-card">
+    <img src="/LukeRobotPhoto.jpg" alt="Luke Basic Robot Arm" />
+    <h3>Luke Basic</h3>
+    <p class="price">$699</p>
+    <p class="tag">$599 early-bird (Kickstarter)</p>
+    <p>
+      The accessible entry Luke with Feetech 3235-class motors — great for makers, classrooms,
+      and first automation projects without compromising the software experience.
+    </p>
+    <ul>
+      <li>Same web app &amp; control modes</li>
+      <li>Lower entry price</li>
+      <li>Ideal for learning &amp; light tasks</li>
+    </ul>
+    <a class="cta-button" href="mailto:info@deltaengine.net?subject=Luke%20Basic%20inquiry">Inquire</a>
+  </article>
 
-Item  Amount ($)
-Sale Price  499.00
-VAT (19% included)  79.68
-PayPal Fee (2.49%)  12.44
-PayPal Fixed Fee  0.35
-Net to you  406.53
+  <article class="shop-card soon">
+    <img src="/Luke.png" alt="Luke Mini Robot Arm" />
+    <h3>Luke Mini</h3>
+    <p class="price">$299</p>
+    <p class="tag">Coming soon</p>
+    <p>
+      A smaller, simplified arm — shorter links, lighter column, and more affordable motors
+      (Feetech 3215-class) for desks and compact work cells.
+    </p>
+    <ul>
+      <li>Compact footprint</li>
+      <li>Budget-friendly parts</li>
+      <li>Join the waitlist</li>
+    </ul>
+    <a class="cta-button secondary" href="mailto:info@deltaengine.net?subject=Luke%20Mini%20waitlist">Join waitlist</a>
+  </article>
+</section>
 
-Ben, [2025-07-21 12:09]
-international paypal fee is even 3.49%, but taxes are not applied here then, all very complicated
+<section class="content-section">
+  <h3>What’s included</h3>
+  <ul class="feature-list">
+    <li>Assembled or kit options depending on campaign / SKU</li>
+    <li>On-board ESP32 server with Wi‑Fi setup</li>
+    <li>Access to this web controller (no app store install)</li>
+    <li>Docs, wiki guides, and open firmware on GitHub</li>
+  </ul>
+  <p class="note">
+    Shipping typically adds roughly €10–20 in Europe and more for US / worldwide.
+    Local VAT or import taxes apply. Exact totals depend on destination and payment provider.
+  </p>
+</section>
 
-Ben, [2025-07-21 12:09]
-plus shipping won't be cheap internationally
-
-Ashi, [2025-07-21 12:10]
-Luke robot pricing?
-
-Ben, [2025-07-21 12:10]
-internal costs are $350 (material) + $150–$250 (labor) = $500–$600 per robot, and you sell for $499 including VAT/shipping, you will lose money after PayPal fees and taxes.
-
-To break even or make a profit, you must:
-
-Set your base price so that after VAT, PayPal fees, and shipping, you receive at least your cost + desired profit.
-How to calculate your minimum price:
-
-Estimate total cost per unit:
-
-Material: $350
-Labor: $200 (average)
-Total: $550
-Add desired profit:
-
-Example: $100 profit → Target net: $650
-Calculate VAT (for EU):
-
-If you want $650 net, and VAT is 19%,
-Price before VAT: $650
-VAT: $650 × 0.19 = $123.50
-Price including VAT: $650 + $123.50 = $773.50
-Add PayPal fees (3.49% + $0.49):
-
-PayPal fee: $773.50 × 0.0349 + $0.49 ≈ $27.00
-Final price: $773.50 + $27.00 ≈ $800.50
-Add shipping (if not included):
-
-Example: $50 shipping → $850.50
-
-Ben, [2025-07-21 12:11]
-again, calculations are not easy ..
-
-Ben, [2025-07-21 12:11]
-all these numbers change and depend on the shop system as well and are different in each country
-
-Ben, [2025-07-21 12:11]
-but I think 850$ is too steep for the initial price, especially on kickstarter we should offer a cheaper option
-
-Ashi, [2025-07-21 12:17]
-Could we maybe try to apply for funding support?
-We also have to take into account packaging cost
-
-Ben, [2025-07-21 15:18]
-$899 Luke Pro Robot Arm (the one we always show, send to reviewers, best top notch quality, Feetech 3250 motors, we can build 50x)
-$699 Luke Basic Robot Arm (cheaper entry one, $599 Early Bird Kickstarter, uses Feetech 3235 motors, we can build 100x)
-$299 Luke Mini Robot Arm (coming soon, all parts replaced by much cheaper, lots of complicated things replaced into cheaper, smaller robot (column half, arms shorter, motors just Feetech 3215, which are less than half the price of Basic)
-
-VAT/taxes + shipping is added on top, so prices in the EU are more like 749 euro for Luke Basic + shipping (10-20)
-
-Ben, [2025-07-21 15:20]
-but the initial $499 is not possible for us to break even, we would need to sell many hundreds of robots per month and that is not possible with our small team. so even when we scale up and have more people, we also need more money to build more robots, which is more like 600+ euro per robot needed.
-
-also kickstarter will take 5%, paypal takes 3.49%, other payment processors 2-3% as well, shipping 10-20 in europe, 50-80 us/worldwide, taxes are 19% mostly in europe (sweden is 24%), us around 10%, most other places 10-20%, but that has to be paid to the import tax in whatever country the customer is in ..
+<section class="content-section contact">
+  <h3>Business &amp; education</h3>
+  <p>
+    Need multiple units, classroom packs, or custom end effectors? Contact Delta Engine for
+    quotes and lead times.
+  </p>
+  <a class="cta-button" href="https://deltaengine.net/About/Imprint" target="_blank" rel="noopener">Contact Delta Engine</a>
+</section>

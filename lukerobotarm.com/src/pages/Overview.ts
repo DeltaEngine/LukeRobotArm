@@ -1,5 +1,8 @@
+import html from './Overview.html?raw';
+import { bindNavLinks, loadPage } from './loadPage';
+
 export default function Overview() {
-  const container = document.createElement('div');
-  container.innerHTML = `<h2>Overview</h2><p>This is the overview page. Add your robot arm summary here.</p>`;
+  const container = loadPage(html, 'page overview-page');
+  bindNavLinks(container);
   return container;
 }
