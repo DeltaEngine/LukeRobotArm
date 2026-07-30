@@ -1,15 +1,13 @@
-<h2>Controller</h2>
-<p>
-  Control Luke from your phone or PC — virtual joints, quick moves, raw commands, and playback of
-  recorded motions (as on the original LukeRobotArm.com controller).
-</p>
-
 <section class="content-section">
   <h3>Connection</h3>
   <p class="hint">
-    Make sure the robot is powered on and on the same Wi‑Fi. For manual IP entry, use the fields below.
+    Power on the robot and join the same Wi-Fi. Search for robots on your network or enter the IP.
   </p>
-  <div id="controllerConnect"></div>
+  <div id="connectPanel"></div>
+  <div class="button-row">
+    <button type="button" id="statusBtn" class="btn-secondary">Request status</button>
+    <button type="button" id="reconnectBtn" class="btn-primary">Reconnect</button>
+  </div>
 </section>
 
 <section class="content-section">
@@ -47,8 +45,7 @@
 <section class="content-section">
   <h3>Play recorded moves</h3>
   <p>
-    Load a saved motion sequence and play it back on the connected Luke
-    (same idea as the “Play Recorded Moves” page on the classic site).
+    Load a saved motion sequence and play it back on the connected Luke.
   </p>
   <div class="player">
     <div class="connection-row">

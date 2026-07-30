@@ -1,6 +1,7 @@
-import html from './Controller.html?raw';
+import html from './Control.html?raw';
 import {
   connect,
+  disconnect,
   getHost,
   mountConnectionPanel,
   send,
@@ -24,13 +25,22 @@ const JOINTS: JointDef[] = [
   { id: 'j5', label: 'Gripper', min: 0, max: 100, value: 50 },
 ];
 
-export default function Controller() {
-  const container = loadPage(html, 'page controller-page');
+export default function Connect() {
+  const container = loadPage(html, 'page connect-page');
 
-  const cleanup = mountConnectionPanel(container.querySelector('#controllerConnect') as HTMLElement);
+  const cleanup = mountConnectionPanel(container.querySelector('#connectPanel') as HTMLElement);
 
   const playerHost = container.querySelector('#playerHost') as HTMLInputElement | null;
   if (playerHost) playerHost.value = getHost();
+
+  container.querySelector('#statusBtn')?.addEventListener('click', () => {
+    sendCommand('get_status');
+  });
+
+  container.querySelector('#reconnectBtn')?.addEventListener('click', () => {
+    disconnect(false);
+    connect(getHost());
+  });
 
   const jointTable = container.querySelector('#jointTable') as HTMLElement;
   const jointState: Record<string, number> = {};

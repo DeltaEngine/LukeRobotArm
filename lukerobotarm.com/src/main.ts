@@ -1,7 +1,6 @@
 import './style.css';
 import Overview from './pages/Overview';
-import Connect from './pages/Connect';
-import Controller from './pages/Controller';
+import Control from './pages/Control';
 import Voice from './pages/Voice';
 import Camera from './pages/Camera';
 import Modules from './pages/Modules';
@@ -10,27 +9,26 @@ import Shop from './pages/Shop';
 
 const content = document.querySelector('.content');
 let activeCleanup: (() => void) | null = null;
+let currentPage = 'overview';
 
 const pageMap: Record<string, () => HTMLElement> = {
   overview: Overview,
-  connect: Connect,
-  controller: Controller,
+  guides: Guides,
+  connect: Control,
+  shop: Shop,
   voice: Voice,
   camera: Camera,
   modules: Modules,
-  guides: Guides,
-  shop: Shop,
 };
 
 const menuButtons = [
   'overviewBtn',
-  'connectBtn',
-  'controllerBtn',
+  'guidesBtn',
+  'controlBtn',
+  'shopBtn',
   'voiceBtn',
   'cameraBtn',
   'modulesBtn',
-  'guidesBtn',
-  'shopBtn',
 ];
 
 function setActiveButton(page: string) {
@@ -45,7 +43,7 @@ function setActiveButton(page: string) {
 
 function showPage(page: string) {
   if (!content) return;
-
+  currentPage = page;
   if (activeCleanup) {
     try {
       activeCleanup();
@@ -54,11 +52,10 @@ function showPage(page: string) {
     }
     activeCleanup = null;
   }
-
   content.innerHTML = '';
   const pageFn = pageMap[page];
   if (!pageFn) {
-    content.innerHTML = '<h2>Not found</h2>';
+    content.innerHTML = '<section class="content-section"><p>Not found</p></section>';
     return;
   }
 
@@ -93,3 +90,26 @@ window.addEventListener('hashchange', () => {
   const page = location.hash.replace('#', '').toLowerCase();
   if (page && pageMap[page]) showPage(page);
 });
+
+// Live-reload page HTML/TS while on `npm run dev` (not `vite preview`, which only serves dist/)
+if (import.meta.hot) {
+  const hmrPages = [
+    { path: './pages/Overview', key: 'overview' },
+    { path: './pages/Guides', key: 'guides' },
+    { path: './pages/Control', key: 'connect' },
+    { path: './pages/Shop', key: 'shop' },
+    { path: './pages/Voice', key: 'voice' },
+    { path: './pages/Camera', key: 'camera' },
+    { path: './pages/Modules', key: 'modules' },
+  ] as const;
+
+  import.meta.hot.accept(
+    hmrPages.map((p) => p.path),
+    (mods) => {
+      mods?.forEach((mod, i) => {
+        if (mod?.default) pageMap[hmrPages[i].key] = mod.default;
+      });
+      showPage(currentPage);
+    },
+  );
+}
