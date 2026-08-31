@@ -21,15 +21,22 @@ const pageMap: Record<string, () => HTMLElement> = {
   modules: Modules,
 };
 
+const hashAliases: Record<string, string> = { control: 'connect' };
+
 const menuButtons = [
   'overviewBtn',
   'guidesBtn',
-  'controlBtn',
+  'connectBtn',
   'shopBtn',
   'voiceBtn',
   'cameraBtn',
   'modulesBtn',
 ];
+
+function resolvePage(raw: string): string {
+  const key = hashAliases[raw] ?? raw;
+  return pageMap[key] ? key : '';
+}
 
 function setActiveButton(page: string) {
   menuButtons.forEach((btnId) => {
@@ -41,8 +48,10 @@ function setActiveButton(page: string) {
   });
 }
 
-function showPage(page: string) {
+function showPage(raw: string) {
   if (!content) return;
+  const page = resolvePage(raw);
+  if (!page) return;
   currentPage = page;
   if (activeCleanup) {
     try {
@@ -53,18 +62,13 @@ function showPage(page: string) {
     activeCleanup = null;
   }
   content.innerHTML = '';
-  const pageFn = pageMap[page];
-  if (!pageFn) {
-    content.innerHTML = '<section class="content-section"><p>Not found</p></section>';
-    return;
-  }
-
-  const el = pageFn();
+  const el = pageMap[page]();
   content.appendChild(el);
   activeCleanup = (el as any)._cleanup ?? null;
   setActiveButton(page);
+  content.scrollTop = 0;
+  window.scrollTo(0, 0);
 
-  // Keep URL hash in sync for deep links / shareable pages
   if (location.hash.replace('#', '') !== page) {
     history.replaceState(null, '', `#${page}`);
   }
@@ -78,8 +82,7 @@ menuButtons.forEach((btnId) => {
 
 function initialPage(): string {
   const hash = location.hash.replace('#', '').toLowerCase();
-  if (hash && pageMap[hash]) return hash;
-  return 'overview';
+  return resolvePage(hash) || 'overview';
 }
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -87,8 +90,8 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 window.addEventListener('hashchange', () => {
-  const page = location.hash.replace('#', '').toLowerCase();
-  if (page && pageMap[page]) showPage(page);
+  const page = resolvePage(location.hash.replace('#', '').toLowerCase());
+  if (page) showPage(page);
 });
 
 // Live-reload page HTML/TS while on `npm run dev` (not `vite preview`, which only serves dist/)

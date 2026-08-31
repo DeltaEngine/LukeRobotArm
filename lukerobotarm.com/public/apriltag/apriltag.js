@@ -1,9 +1,12 @@
 importScripts('apriltag_wasm.js');
-importScripts("https://unpkg.com/comlink/dist/umd/comlink.js");
+const usePostMessage = self.location && /[?&]postMessage=1/.test(self.location.search);
+if (!usePostMessage) {
+  importScripts("https://unpkg.com/comlink/dist/umd/comlink.js");
+}
 
 /**
  * This is a wrapper class that calls apriltag_wasm to load the WASM module and wraps the c implementation calls.
- * The apriltag dectector uses the tag36h11 family.
+ * The apriltag detector in this build is tagCircle21h7.
  * For tag pose estimation, call set_tag_size allows to indicate the size of known tags.
  * If size is not defined using set_tag_size() will default to the defaukt tag size of 0.15 meters
  *
@@ -378,7 +381,21 @@ class Apriltag {
 
 }
 
-Comlink.expose(Apriltag);
+if (usePostMessage) {
+  let instance = null;
+  self.onmessage = function (event) {
+    const data = event.data;
+    if (!data || data.type !== 'detect' || !instance) return;
+    const pixels = data.pixels instanceof ArrayBuffer ? new Uint8Array(data.pixels) : data.pixels;
+    const detections = instance.detect(pixels, data.width, data.height);
+    self.postMessage({ type: 'detections', detections });
+  };
+  instance = new Apriltag(function () {
+    self.postMessage({ type: 'ready' });
+  });
+} else {
+  Comlink.expose(Apriltag);
+}
 
 /**
  * IMPORTANT: Fixed compatibility issue when switching from tag36h11 to tagCircle21h7

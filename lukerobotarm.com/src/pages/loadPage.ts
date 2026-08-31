@@ -12,13 +12,28 @@ export function loadPage(html: string, className = 'page'): HTMLElement {
   return container;
 }
 
-/** Wire [data-nav="pageName"] clicks to the matching sidebar button. */
+const PAGE_BTN: Record<string, string> = {
+  overview: 'overviewBtn',
+  guides: 'guidesBtn',
+  connect: 'connectBtn',
+  control: 'connectBtn',
+  shop: 'shopBtn',
+  voice: 'voiceBtn',
+  camera: 'cameraBtn',
+  modules: 'modulesBtn',
+};
+
+/** Wire in-page #hash / [data-nav] clicks to the matching sidebar button. */
 export function bindNavLinks(root: ParentNode): void {
-  root.querySelectorAll<HTMLElement>('[data-nav]').forEach((el) => {
+  root.querySelectorAll<HTMLAnchorElement>('a[href^="#"], [data-nav]').forEach((el) => {
+    const href = el.getAttribute('href') ?? '';
+    const hash = href.startsWith('#') ? href.slice(1).toLowerCase() : '';
+    const page = (el.dataset.nav || hash).toLowerCase();
+    const btnId = PAGE_BTN[page];
+    if (!btnId) return;
     el.addEventListener('click', (e) => {
       e.preventDefault();
-      const page = el.dataset.nav;
-      if (page) document.getElementById(`${page}Btn`)?.click();
+      document.getElementById(btnId)?.click();
     });
   });
 }

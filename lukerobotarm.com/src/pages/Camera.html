@@ -1,29 +1,32 @@
-<h2>Camera - AprilTag Detection</h2>
+<h2>Camera — AprilTag detection</h2>
 <div class="camera-container">
-  <video id="cameraVideo" autoplay playsinline></video>
+  <video id="cameraVideo" autoplay playsinline muted></video>
   <canvas id="cameraCanvas"></canvas>
   <div id="tagInfo" class="tag-info">
-    <h3>Robot Arm Position</h3>
-    <div id="tagStatus">No AprilTag detected</div>
+    <h3>Robot arm position</h3>
+    <div id="tagStatus">Starting camera…</div>
     <div id="tagDetails"></div>
   </div>
 </div>
 
 <div class="camera-controls">
-  <button id="startCamera">Start Camera</button>
-  <button id="stopCamera">Stop Camera</button>
-  <button id="toggleFlash">Toggle Flash</button>
-  <button id="switchDetection">Switch Detection Method</button>
-  <button id="testLibrary">Test js-aruco Library</button>
-  <button id="tryOpenCV">Try OpenCV.js</button>
+  <button type="button" id="startCamera">Start camera</button>
+  <button type="button" id="stopCamera">Stop camera</button>
+  <button type="button" id="toggleFlash">Toggle flash</button>
+  <label class="detector-label">Detector
+    <select id="detectorFamily">
+      <option value="apriltag" selected>AprilTag circle21h7</option>
+      <option value="aruco">ArUco</option>
+    </select>
+  </label>
 </div>
 
 <div class="instructions">
-  <h3>Instructions</h3>  <p>1. Point your phone camera at the robot arm</p>
-  <p>2. Ensure the ArUco marker on the robot is visible and well-lit</p>
-  <p>3. The system will detect ArUco markers and show their position relative to your phone</p>
-  <p>4. Use the position data to give precise pickup instructions</p>  <p><strong>Note:</strong> Print an ArUco marker from <a href="https://chev.me/arucogen/" target="_blank">ArUco Generator</a> and attach it to your robot arm</p>
-  <p><strong>Quick Test:</strong> <a href="/aruco-marker-generator.html" target="_blank">Generate Test Markers</a> or use the button below to try a different detection method</p>
+  <h3>Instructions</h3>
+  <p>1. Point the camera at the robot arm</p>
+  <p>2. The tag on Luke is <strong>AprilTag circle21h7</strong> (typically ID 6). Keep it lit and in frame.</p>
+  <p>3. Overlay shows tag ID, distance, and offset from the image center.</p>
+  <p>Need a test ArUco instead? Switch the detector above, or <a href="/aruco-marker-generator.html" target="_blank" rel="noopener">generate an ArUco marker</a>.</p>
 </div>
 
 <style>
@@ -62,7 +65,7 @@
 
 #tagStatus {
   font-weight: bold;
-  color: #666;
+  color: #ccc;
   margin-bottom: 0.5rem;
 }
 
@@ -81,9 +84,11 @@
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
+  align-items: center;
 }
 
-.camera-controls button {
+.camera-controls button,
+.detector-label select {
   padding: 0.5rem 1rem;
   background: #007bff;
   color: white;
@@ -92,13 +97,14 @@
   cursor: pointer;
 }
 
-.camera-controls button:hover {
-  background: #0056b3;
+.detector-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.camera-controls button:disabled {
-  background: #6c757d;
-  cursor: not-allowed;
+.detector-label select {
+  background: #444;
 }
 
 .instructions {
@@ -110,9 +116,5 @@
 
 .instructions h3 {
   margin-top: 0;
-}
-
-.instructions p {
-  margin: 0.5rem 0;
 }
 </style>

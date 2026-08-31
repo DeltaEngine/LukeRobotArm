@@ -25,7 +25,7 @@ void setupOTA()
   ArduinoOTA.setHostname(GetLukeName().c_str());
   ArduinoOTA.setTimeout(30000);
   ArduinoOTA.onStart([]()
-{
+  {
     String type;
     if (ArduinoOTA.getCommand() == U_FLASH) {
       type = "sketch";
