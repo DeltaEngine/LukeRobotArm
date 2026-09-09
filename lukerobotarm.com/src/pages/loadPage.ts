@@ -15,12 +15,10 @@ export function loadPage(html: string, className = 'page'): HTMLElement {
 const PAGE_BTN: Record<string, string> = {
   overview: 'overviewBtn',
   guides: 'guidesBtn',
+  assembly: 'guidesBtn',
   connect: 'connectBtn',
   control: 'connectBtn',
   shop: 'shopBtn',
-  voice: 'voiceBtn',
-  camera: 'cameraBtn',
-  modules: 'modulesBtn',
 };
 
 /** Wire in-page #hash / [data-nav] clicks to the matching sidebar button. */

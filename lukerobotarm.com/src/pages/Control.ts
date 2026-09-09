@@ -1,9 +1,12 @@
 import html from './Control.html?raw';
 import {
   connect,
+  connectVirtual,
   disconnect,
   getHost,
-  mountConnectionPanel,
+  isConnected,
+  isVirtual,
+  onStatus,
   send,
   sendCommand,
 } from '../robot';
@@ -25,22 +28,72 @@ const JOINTS: JointDef[] = [
   { id: 'j5', label: 'Gripper', min: 0, max: 100, value: 50 },
 ];
 
+type RobotChoice = { id: string; label: string; virtual?: boolean };
+
+const VIRTUAL_ROBOT: RobotChoice = { id: 'virtual', label: 'Virtual Luke', virtual: true };
+const SEARCH_MS = 2500; // last host / AP only; upgrade: mDNS
+
 export default function Connect() {
   const container = loadPage(html, 'page connect-page');
+  const statusEl = container.querySelector('#robotSearchStatus') as HTMLElement;
+  const listEl = container.querySelector('#robotList') as HTMLElement;
+  let selectedId = '';
+  let searchTimer = 0;
 
-  const cleanup = mountConnectionPanel(container.querySelector('#connectPanel') as HTMLElement);
+  function renderRobots(robots: RobotChoice[]) {
+    listEl.innerHTML = '';
+    robots.forEach((r) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'robot-card' + (r.id === selectedId ? ' active' : '');
+      btn.textContent = r.label;
+      btn.addEventListener('click', () => {
+        selectedId = r.id;
+        if (r.virtual) {
+          connectVirtual();
+          statusEl.textContent = 'Using a virtual Luke.';
+        } else {
+          connect(getHost());
+        }
+        renderRobots(robots);
+      });
+      listEl.appendChild(btn);
+    });
+  }
 
-  const playerHost = container.querySelector('#playerHost') as HTMLInputElement | null;
-  if (playerHost) playerHost.value = getHost();
+  function showFound() {
+    window.clearTimeout(searchTimer);
+    selectedId = 'luke';
+    statusEl.textContent = 'Found a Luke robot on your local Wi-Fi.';
+    renderRobots([{ id: 'luke', label: 'Luke' }]);
+  }
 
-  container.querySelector('#statusBtn')?.addEventListener('click', () => {
-    sendCommand('get_status');
+  function showVirtual() {
+    selectedId = '';
+    statusEl.textContent = 'No Luke found on your local Wi-Fi.';
+    renderRobots([VIRTUAL_ROBOT]);
+  }
+
+  const unsubStatus = onStatus((s) => {
+    if (s === 'connected' && !isVirtual()) showFound();
   });
 
-  container.querySelector('#reconnectBtn')?.addEventListener('click', () => {
-    disconnect(false);
+  if (isVirtual()) {
+    selectedId = 'virtual';
+    statusEl.textContent = 'No Luke found on your local Wi-Fi.';
+    renderRobots([VIRTUAL_ROBOT]);
+  } else if (isConnected()) {
+    showFound();
+  } else {
+    statusEl.textContent = 'Searching for Luke on your local Wi-Fi…';
     connect(getHost());
-  });
+    searchTimer = window.setTimeout(() => {
+      if (!isConnected()) {
+        disconnect(false);
+        showVirtual();
+      }
+    }, SEARCH_MS);
+  }
 
   const jointTable = container.querySelector('#jointTable') as HTMLElement;
   const jointState: Record<string, number> = {};
@@ -101,11 +154,6 @@ export default function Connect() {
     }
   });
 
-  container.querySelector('#playerConnectBtn')?.addEventListener('click', () => {
-    const host = (container.querySelector('#playerHost') as HTMLInputElement).value;
-    connect(host);
-  });
-
   container.querySelector('#playerResetBtn')?.addEventListener('click', () => {
     sendCommand('reset');
   });
@@ -138,6 +186,9 @@ export default function Connect() {
     sendCommand('stop');
   });
 
-  (container as any)._cleanup = cleanup;
+  (container as any)._cleanup = () => {
+    window.clearTimeout(searchTimer);
+    unsubStatus();
+  };
   return container;
 }

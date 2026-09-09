@@ -12,6 +12,7 @@ const STORAGE_KEY = 'luke-robot-host';
 let socket: WebSocket | null = null;
 let status: ConnectionStatus = 'disconnected';
 let host = localStorage.getItem(STORAGE_KEY) || DEFAULT_HOST;
+let virtual = false;
 
 const statusListeners = new Set<StatusListener>();
 const messageListeners = new Set<MessageListener>();
@@ -48,7 +49,18 @@ export function getStatus(): ConnectionStatus {
 }
 
 export function isConnected(): boolean {
-  return socket?.readyState === WebSocket.OPEN;
+  return virtual || socket?.readyState === WebSocket.OPEN;
+}
+
+export function isVirtual(): boolean {
+  return virtual;
+}
+
+/** Demo target when nothing is on the LAN. No WebSocket. Upgrade: mDNS / firmware announce. */
+export function connectVirtual(): void {
+  disconnect(false);
+  virtual = true;
+  setStatus('connected', 'Virtual Luke');
 }
 
 export function onStatus(listener: StatusListener): () => void {
@@ -63,9 +75,10 @@ export function onMessage(listener: MessageListener): () => void {
 }
 
 export function connect(customHost?: string): void {
+  virtual = false;
   if (customHost) setHost(customHost);
   if (!host) {
-    setStatus('error', '⚠️ Enter a robot IP or hostname first');
+    setStatus('error', '⚠️ No robot address');
     return;
   }
 
@@ -104,6 +117,7 @@ export function connect(customHost?: string): void {
 }
 
 export function disconnect(logIt = true): void {
+  virtual = false;
   if (socket) {
     socket.onclose = null;
     socket.close();
@@ -117,8 +131,13 @@ export function disconnect(logIt = true): void {
 }
 
 export function send(payload: unknown): boolean {
+  if (virtual) {
+    const data = typeof payload === 'string' ? payload : JSON.stringify(payload);
+    log(`📤 ${data}`);
+    return true;
+  }
   if (socket?.readyState !== WebSocket.OPEN) {
-    log('⚠️ Not connected — open Connect or enter the robot IP first');
+    log('⚠️ Not connected — pick a robot first');
     return false;
   }
   const data = typeof payload === 'string' ? payload : JSON.stringify(payload);

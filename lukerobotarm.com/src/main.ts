@@ -21,16 +21,13 @@ const pageMap: Record<string, () => HTMLElement> = {
   modules: Modules,
 };
 
-const hashAliases: Record<string, string> = { control: 'connect' };
+const hashAliases: Record<string, string> = { control: 'connect', assembly: 'guides' };
 
 const menuButtons = [
   'overviewBtn',
   'guidesBtn',
   'connectBtn',
   'shopBtn',
-  'voiceBtn',
-  'cameraBtn',
-  'modulesBtn',
 ];
 
 function resolvePage(raw: string): string {

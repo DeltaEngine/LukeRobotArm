@@ -213,7 +213,7 @@ button:focus-visible {
   margin-right: auto;
 }
 
-/* Guides: assembly images can go full width of content column */
+/* Guides: square assembly shots stay native 720px, fill the phone below that */
 .guides-page {
   max-width: none;
   margin: 0;
@@ -226,7 +226,8 @@ button:focus-visible {
 }
 
 .guides-page .assembly-image {
-  max-width: var(--page-width);
+  max-width: 720px;
+  width: 100%;
   margin-left: auto;
   margin-right: auto;
 }
@@ -354,7 +355,7 @@ button:focus-visible {
   margin: 1rem 0 0;
 }
 
-/* Assembly images: one section = one image, light padding */
+/* Assembly images: one section = one square, light padding on desktop */
 .assembly-image {
   padding: 0.75rem;
   margin-bottom: 1rem;
@@ -363,6 +364,18 @@ button:focus-visible {
 .assembly-image img {
   width: 100%;
   height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
+  display: block;
+  border-radius: 8px;
+  background: #f0f0ee;
+}
+
+.assembly-image iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  border: 0;
   display: block;
   border-radius: 8px;
   background: #000;
@@ -391,6 +404,39 @@ button:focus-visible {
   margin: 0;
   font-size: 0.95rem;
   color: #ccc;
+}
+
+/* ---- Robot picker (Control) ---- */
+.content-section > .hint:first-child {
+  margin-top: 0;
+}
+
+.robot-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.robot-card {
+  width: 100%;
+  text-align: left;
+  padding: 0.85rem 1rem;
+  background: #2a2a2a;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.robot-card:hover {
+  background: #3a3a3a;
+  border-color: #555;
+}
+
+.robot-card.active {
+  background: #3d2a1a;
+  border-color: var(--accent);
 }
 
 /* ---- Connection panel ---- */
@@ -688,8 +734,8 @@ footer a {
     width: 100%;
     padding: 0.5rem;
     gap: 0.25rem;
-    overflow-x: auto;
-    flex-wrap: wrap;
+    overflow-x: hidden;
+    flex-wrap: nowrap;
     border-right: none;
     border-bottom: 1px solid #333;
   }
@@ -698,12 +744,13 @@ footer a {
   .menu-link {
     padding: 0.5rem 0.25rem;
     font-size: 0.7rem;
-    flex: 1 1 calc(25% - 0.25rem);
-    min-width: 65px;
+    flex: 1 1 0;
+    min-width: 0;
     flex-direction: column;
     gap: 0.25rem;
     text-align: center;
     justify-content: center;
+    white-space: nowrap;
   }
 
   .page {
@@ -718,16 +765,19 @@ footer a {
     border-right: none;
   }
 
-  /* Full-bleed assembly photos on mobile */
+  /* Full-bleed square assembly shots on mobile */
+  .guides-page .assembly-image,
   .assembly-image {
+    max-width: none;
     padding: 0;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     background: transparent;
     border: none;
     border-radius: 0;
   }
 
-  .assembly-image img {
+  .assembly-image img,
+  .assembly-image iframe {
     border-radius: 0;
   }
 

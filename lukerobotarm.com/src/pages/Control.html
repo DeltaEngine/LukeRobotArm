@@ -1,13 +1,6 @@
 <section class="content-section">
-  <h3>Connection</h3>
-  <p class="hint">
-    Power on the robot and join the same Wi-Fi. Search for robots on your network or enter the IP.
-  </p>
-  <div id="connectPanel"></div>
-  <div class="button-row">
-    <button type="button" id="statusBtn" class="btn-secondary">Request status</button>
-    <button type="button" id="reconnectBtn" class="btn-primary">Reconnect</button>
-  </div>
+  <p class="hint" id="robotSearchStatus">Searching for Luke on your local Wi-Fi…</p>
+  <div id="robotList" class="robot-list"></div>
 </section>
 
 <section class="content-section">
@@ -49,8 +42,6 @@
   </p>
   <div class="player">
     <div class="connection-row">
-      <input id="playerHost" type="text" placeholder="Robot IP" />
-      <button type="button" id="playerConnectBtn" class="btn-primary">Connect</button>
       <button type="button" id="playerResetBtn" class="btn-secondary">Reset robot</button>
     </div>
     <div class="player-actions">
