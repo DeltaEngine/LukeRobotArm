@@ -182,7 +182,9 @@ button:focus-visible {
 
 /* No outer content padding - sections carry their own spacing */
 .content {
+  position: relative;
   flex: 1;
+  min-height: 0;
   padding: 0;
   background: #1a1a1a;
   color: #fff;
@@ -233,6 +235,7 @@ button:focus-visible {
 }
 
 .ask-luke {
+  position: -webkit-sticky;
   position: sticky;
   top: 0;
   z-index: 4;
@@ -243,6 +246,16 @@ button:focus-visible {
   background: #252018;
   border: 1px solid #4a3520;
   border-radius: 12px;
+}
+
+/* Direct child of .content — sticks to the real scrollport */
+.content > .ask-luke {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  border-radius: 0;
+  border-left: none;
+  border-right: none;
 }
 
 .ask-luke-intro {
@@ -282,7 +295,7 @@ button:focus-visible {
 #luke-overview,
 [id^='luke-step-'],
 #poweron {
-  scroll-margin-top: 5.5rem;
+  scroll-margin-top: 7rem;
 }
 
 .ask-luke-error {

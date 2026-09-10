@@ -6,6 +6,7 @@ import Camera from './pages/Camera';
 import Modules from './pages/Modules';
 import Guides from './pages/Guides';
 import Shop from './pages/Shop';
+import { isGuidesAnchor, scrollLukeSection } from './assembly/lukeChat';
 
 const content = document.querySelector('.content');
 let activeCleanup: (() => void) | null = null;
@@ -32,7 +33,8 @@ const menuButtons = [
 
 function resolvePage(raw: string): string {
   const key = hashAliases[raw] ?? raw;
-  return pageMap[key] ? key : '';
+  if (pageMap[key]) return key;
+  return isGuidesAnchor(raw) ? 'guides' : '';
 }
 
 function setActiveButton(page: string) {
@@ -66,8 +68,12 @@ function showPage(raw: string) {
   content.scrollTop = 0;
   window.scrollTo(0, 0);
 
-  if (location.hash.replace('#', '') !== page) {
+  const fragment = location.hash.replace('#', '').toLowerCase();
+  if (!isGuidesAnchor(fragment) && fragment !== page) {
     history.replaceState(null, '', `#${page}`);
+  }
+  if (page === 'guides' && isGuidesAnchor(fragment)) {
+    requestAnimationFrame(() => scrollLukeSection(fragment));
   }
 }
 
@@ -87,8 +93,14 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 window.addEventListener('hashchange', () => {
-  const page = resolvePage(location.hash.replace('#', '').toLowerCase());
-  if (page) showPage(page);
+  const raw = location.hash.replace('#', '').toLowerCase();
+  const page = resolvePage(raw);
+  if (!page) return;
+  if (page === currentPage) {
+    if (isGuidesAnchor(raw)) scrollLukeSection(raw);
+    return;
+  }
+  showPage(raw);
 });
 
 // Live-reload page HTML/TS while on `npm run dev` (not `vite preview`, which only serves dist/)

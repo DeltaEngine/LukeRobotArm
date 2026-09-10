@@ -1,6 +1,7 @@
 import html from './Guides.html?raw';
 import { bindNavLinks, loadPage } from './loadPage';
-import { currentStepLabel, LukeLive } from '../assembly/lukeChat';
+import { keepScreenAwake } from '../assembly/keepAwake';
+import { currentStepLabel, LukeLive, scrollLukeSection } from '../assembly/lukeChat';
 
 function joinTranscript(prev: string, chunk: string): string {
   if (!chunk) return prev;
@@ -44,7 +45,6 @@ export default function Guides() {
     note: (text) => {
       errorEl.hidden = !text;
       errorEl.textContent = text;
-      if (text) errorEl.scrollIntoView({ block: 'nearest' });
     },
     endTurn: () => {
       greetingDone = true;
@@ -78,8 +78,8 @@ export default function Guides() {
     },
     getStep: () => currentStepLabel(container),
     onMic: (on) => {
-      micBtn.textContent = on ? 'Mic on' : 'Enable mic';
-      micBtn.disabled = on;
+      micBtn.textContent = on ? 'Stop' : 'Enable mic';
+      micBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
     },
   });
 
@@ -93,9 +93,26 @@ export default function Guides() {
   });
 
   micBtn.addEventListener('click', () => {
-    void live.enableMic();
+    void live.toggleMic();
   });
 
-  (container as unknown as { _cleanup?: () => void })._cleanup = () => live.stop();
+  container.querySelectorAll<HTMLAnchorElement>('a[href="#poweron"], a[href^="#luke-"]').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      scrollLukeSection(a.getAttribute('href') || '');
+    });
+  });
+
+  queueMicrotask(() => {
+    const parent = container.parentElement;
+    const chat = container.querySelector('#askLuke');
+    if (parent && chat) parent.insertBefore(chat, container);
+  });
+
+  const releaseAwake = keepScreenAwake();
+  (container as unknown as { _cleanup?: () => void })._cleanup = () => {
+    releaseAwake();
+    live.stop();
+  };
   return container;
 }

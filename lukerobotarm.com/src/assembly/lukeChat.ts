@@ -22,16 +22,37 @@ function errText(err: unknown, fallback: string): string {
   return err instanceof Error && err.message ? err.message : fallback;
 }
 
-function wsCloseMsg(ev: CloseEvent): string {
+/** Idle / normal Gemini closes — do not alarm. 1002 is the usual idle timeout. */
+export function voiceCloseNote(ev: { code: number; reason: string }): string {
+  if (ev.code === 1000 || ev.code === 1001 || ev.code === 1002) return '';
   const why = (ev.reason || '').trim();
-  if (why) return `Luke disconnected (${ev.code}): ${why}`;
+  if (why) return `Voice service disconnected (${ev.code}): ${why}`;
   if (ev.code === 1006) {
-    return 'Luke disconnected (1006): WebSocket died — Gemini rejected the token, or the browser blocked the socket.';
+    return 'Voice service disconnected — the browser blocked the socket, or the session was rejected.';
   }
-  if (ev.code === 1008) return 'Luke disconnected (1008): Gemini rejected the session.';
-  if (ev.code === 1011) return 'Luke disconnected (1011): Gemini server error.';
-  if (ev.code === 1000) return 'Session ended.';
-  return `Luke disconnected (WebSocket ${ev.code}).`;
+  if (ev.code === 1008) return 'Voice service disconnected: session rejected.';
+  if (ev.code === 1011) return 'Voice service disconnected: server error.';
+  return `Voice service disconnected (WebSocket ${ev.code}).`;
+}
+
+export function sectionId(raw: string): string {
+  const s = String(raw || '')
+    .trim()
+    .toLowerCase()
+    .replace(/^#/, '');
+  if (s === 'overview' || s === '0' || s === '00' || s === 'luke-overview') return 'luke-overview';
+  if (s === 'poweron' || s === 'power-on' || s === 'power') return 'poweron';
+  const n = s.match(/(\d{1,2})/);
+  const num = n ? Number(n[1]) : 0;
+  if (num >= 1 && num <= 12) return `luke-step-${num}`;
+  return 'poweron';
+}
+
+export function isGuidesAnchor(raw: string): boolean {
+  const id = String(raw || '')
+    .replace(/^#/, '')
+    .toLowerCase();
+  return id === 'poweron' || id === 'luke-overview' || /^luke-step-\d{1,2}$/.test(id);
 }
 
 export function lukeUserId(): string {
@@ -49,7 +70,9 @@ export function lukeUserId(): string {
 export function currentStepLabel(root: ParentNode): string {
   const images = [...root.querySelectorAll<HTMLElement>('.assembly-image[data-step]')];
   if (!images.length) return '';
-  const mid = window.innerHeight * 0.45;
+  const scroller = document.querySelector('.content');
+  const box = scroller?.getBoundingClientRect();
+  const mid = box ? box.top + box.height * 0.45 : window.innerHeight * 0.45;
   let best = images[0];
   let bestDist = Infinity;
   for (const el of images) {
@@ -193,16 +216,33 @@ type LiveUi = {
   onMic: (on: boolean) => void;
 };
 
-export function scrollLukeSection(raw: string) {
-  const s = String(raw || '').trim().toLowerCase();
-  let id = 'poweron';
-  if (s === 'overview' || s === '0' || s === '00') id = 'luke-overview';
-  else {
-    const n = s.match(/(\d{1,2})/);
-    const num = n ? Number(n[1]) : 0;
-    if (num >= 1 && num <= 12) id = `luke-step-${num}`;
+const MIC_IDLE_MS = 2 * 60 * 1000;
+
+function yIn(el: HTMLElement, scroller: HTMLElement): number {
+  let y = 0;
+  let n: HTMLElement | null = el;
+  while (n && n !== scroller) {
+    y += n.offsetTop;
+    n = n.offsetParent as HTMLElement | null;
   }
-  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (n === scroller) return y;
+  return el.getBoundingClientRect().top - scroller.getBoundingClientRect().top + scroller.scrollTop;
+}
+
+/** Instant jump in `.content`. Smooth scrollIntoView dies after iOS zoom. */
+export function scrollLukeSection(raw: string) {
+  const id = sectionId(raw);
+  const el = document.getElementById(id);
+  if (!el) return id;
+  const scroller = document.querySelector('.content') as HTMLElement | null;
+  if (scroller) {
+    const chat = document.getElementById('askLuke');
+    const pad = chat ? chat.offsetHeight : 0;
+    scroller.scrollTop = Math.max(0, yIn(el, scroller) - pad);
+  } else {
+    el.scrollIntoView();
+  }
+  if (location.hash !== `#${id}`) history.replaceState(null, '', `#${id}`);
   return id;
 }
 
@@ -212,8 +252,11 @@ export class LukeLive {
   private ctx: AudioContext | null = null;
   private pcmOut: PcmOut | null = null;
   private mic: MediaStream | null = null;
+  private micSrc: MediaStreamAudioSourceNode | null = null;
+  private micMute: GainNode | null = null;
   private processor: ScriptProcessorNode | null = null;
   private timer = 0;
+  private idle = 0;
   private closed = false;
   private started = false;
   private autoQueue: string[] = [];
@@ -306,7 +349,7 @@ export class LukeLive {
       } else {
         this.ui.note('');
       }
-      this.timer = window.setTimeout(() => this.stop('Session ended.'), data.sessionMs || 5 * 60 * 1000);
+      this.timer = window.setTimeout(() => this.stop(), data.sessionMs || 5 * 60 * 1000);
       return true;
     } catch (err) {
       this.fail(errText(err, 'Luke could not start'));
@@ -361,17 +404,17 @@ export class LukeLive {
       ws.addEventListener('close', (ev) => {
         window.clearTimeout(t);
         console.warn('[luke] websocket close', ev.code, ev.reason);
-        const why = wsCloseMsg(ev);
+        const why = voiceCloseNote(ev);
         if (!opened) {
-          reject(new Error(why));
+          reject(new Error(why || 'Voice service disconnected.'));
           return;
         }
-        if (!this.closed) this.stop(why);
+        if (!this.closed) this.stop(why, { endSlot: false });
       });
       ws.addEventListener('error', () => {
         console.warn('[luke] websocket error', wsUrl.replace(/access_token=[^&]+/, 'access_token=…'));
         if (!opened) return;
-        this.fail('Luke lost the WebSocket (browser blocked it, or Gemini closed it).');
+        this.fail('Voice service disconnected (browser blocked the socket, or the session closed).');
       });
     });
   }
@@ -400,6 +443,7 @@ export class LukeLive {
       return;
     }
     if (msg.toolCall) {
+      this.bumpIdle();
       this.handleTools(msg.toolCall as { functionCalls?: Array<{ name?: string; args?: Record<string, string> | string; id?: string }> });
       return;
     }
@@ -414,13 +458,16 @@ export class LukeLive {
         }
       | undefined;
     if (!sc) return;
+    this.bumpIdle();
     if (sc.interrupted) this.stopPlayback();
     const heard = sc.inputTranscription?.text?.trim() || '';
     if (heard && START_RE.test(heard)) {
+      this.bumpIdle();
       this.beginStartFlow();
       this.nudgeOverview();
     }
     if (heard && !isHiddenNudge(heard)) {
+      this.bumpIdle();
       this.ui.log('you', heard, true);
     }
     if (sc.outputTranscription?.text) this.ui.log('luke', String(sc.outputTranscription.text), true);
@@ -463,6 +510,7 @@ export class LukeLive {
     const starting = START_RE.test(t);
     if (starting) this.beginStartFlow();
     this.ui.log('you', t);
+    this.bumpIdle();
     const ok = await this.ensureStarted();
     if (!this.ready) {
       this.fail(this.lastError || (ok ? 'Luke is not connected.' : 'Luke could not start.'));
@@ -574,6 +622,40 @@ export class LukeLive {
     wait();
   }
 
+  get micOn() {
+    return !!this.mic;
+  }
+
+  async toggleMic() {
+    if (this.mic) {
+      this.disableMic();
+      return;
+    }
+    await this.enableMic();
+  }
+
+  disableMic() {
+    window.clearTimeout(this.idle);
+    this.idle = 0;
+    this.processor?.disconnect();
+    this.processor = null;
+    this.micSrc?.disconnect();
+    this.micSrc = null;
+    this.micMute?.disconnect();
+    this.micMute = null;
+    this.mic?.getTracks().forEach((t) => t.stop());
+    this.mic = null;
+    this.ui.onMic(false);
+  }
+
+  /** Mic on → stop after 2 min of silence. Typing still works. */
+  private bumpIdle() {
+    window.clearTimeout(this.idle);
+    this.idle = 0;
+    if (!this.mic) return;
+    this.idle = window.setTimeout(() => this.disableMic(), MIC_IDLE_MS);
+  }
+
   async enableMic() {
     const ok = await this.ensureStarted();
     if (!this.ready) {
@@ -594,6 +676,8 @@ export class LukeLive {
     const proc = this.ctx.createScriptProcessor(4096, 1, 1);
     const mute = this.ctx.createGain();
     mute.gain.value = 0;
+    this.micSrc = src;
+    this.micMute = mute;
     this.processor = proc;
     const fromRate = this.ctx.sampleRate;
     proc.onaudioprocess = (ev) => {
@@ -609,6 +693,7 @@ export class LukeLive {
     mute.connect(this.ctx.destination);
     this.ui.onMic(true);
     this.ui.note('');
+    this.bumpIdle();
   }
 
   private playPcm(b64: string, mime?: string) {
@@ -624,17 +709,14 @@ export class LukeLive {
     this.pcmOut?.clear();
   }
 
-  stop(status?: string) {
+  stop(status?: string, opts?: { endSlot?: boolean }) {
     if (this.closed) return;
     this.closed = true;
     window.clearTimeout(this.timer);
+    this.disableMic();
     this.stopPlayback();
     this.pcmOut?.dispose();
     this.pcmOut = null;
-    this.processor?.disconnect();
-    this.processor = null;
-    this.mic?.getTracks().forEach((t) => t.stop());
-    this.mic = null;
     try {
       this.ws?.close();
     } catch {
@@ -643,12 +725,27 @@ export class LukeLive {
     this.ws = null;
     void this.ctx?.close();
     this.ctx = null;
-    this.ui.onMic(false);
     if (status) this.fail(status);
+    if (opts?.endSlot === false) return;
     void fetch('/api/luke-session/end', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId: this.userId }),
     }).catch(() => undefined);
   }
+}
+
+{
+  const cases: Array<[string, string]> = [
+    ['overview', 'luke-overview'],
+    ['1', 'luke-step-1'],
+    ['luke-step-12', 'luke-step-12'],
+    ['poweron', 'poweron'],
+    ['#poweron', 'poweron'],
+  ];
+  for (const [raw, id] of cases) {
+    if (sectionId(raw) !== id) throw new Error(`sectionId(${raw})`);
+  }
+  if (voiceCloseNote({ code: 1002, reason: '' }) !== '') throw new Error('1002 should be quiet');
+  if (voiceCloseNote({ code: 1000, reason: 'ok' }) !== '') throw new Error('1000 should be quiet');
 }
