@@ -112,6 +112,13 @@ if ($roboExit -ge 8) {
     }
 }
 
+# Physical api\ makes IIS 403 /api/ and can swallow /api/luke-session before rewrite.
+$apiDir = Join-Path $TargetDir 'api'
+if (Test-Path -LiteralPath $apiDir) {
+    Remove-Item -LiteralPath $apiDir -Recurse -Force
+    Write-Host "Removed api\ (proxy is a rewrite rule, not a folder)"
+}
+
 # Always bring the site back online
 if (Test-Path -LiteralPath $AppOffline) {
     try {

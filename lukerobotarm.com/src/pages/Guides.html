@@ -1,54 +1,66 @@
+<aside class="ask-luke" id="askLuke">
+  <p class="ask-luke-intro">
+    <span class="ask-luke-optional">Optional —
+    Luke can talk you through the assembly steps. Enable your mic to talk back, say <b>start</b> to begin with the overview, then step 1.
+    </span>
+  </p>
+  <ol class="ask-luke-log" id="askLukeLog"><li class="luke">Hi, I am Luke, I can guide you through the assembly of the robot arm.</li></ol>
+  <form class="ask-luke-row" id="askLukeForm">
+    <button type="button" id="askLukeMic" class="btn-secondary">Enable mic</button>
+    <input id="askLukeInput" type="text" placeholder="Type a question…" autocomplete="off" />
+    <button type="submit" id="askLukeSend" class="btn-primary">Ask</button>
+  </form>
+  <p class="ask-luke-error" id="askLukeError" hidden></p>
+</aside>
 <section class="content-section" id="assembly">
   <p class="lead">
     You can assemble your Luke in just a few minutes with these 12 quick and easy steps.
   </p>
   <p>
-    Don't have a robot yet? <a href="#connect" data-nav="connect">Control a virtual one</a> and then go to our <a href="#shop" data-nav="shop">shop</a> to get a real one.
+    Don't have a robot yet? <a href="#connect" data-nav="connect">Control a virtual one</a> and then go to our <a href="#shop" data-nav="shop">shop</a> to get a real one. <a href="#poweron">Skip to Power on &amp; connect</a>
   </p>
-  <p><a href="#poweron">Skip to Power on &amp; connect</a></p>
-</section>
-
-<section class="content-section assembly-image">
-  <iframe src="https://www.youtube.com/embed/j6wZZYvWC8I" title="Luke assembly video" allowfullscreen></iframe>
 </section>
 <section class="content-section assembly-image">
-  <img src="/Assembly00.jpg" alt="Luke parts: gripper, arm, column, top, and base" width="720" height="720" loading="lazy">
+  <iframe src="https://www.youtube.com/embed/x3yqTz8-VlI?enablejsapi=1" title="Luke assembly video" allowfullscreen></iframe>
 </section>
-<section class="content-section assembly-image">
+<section class="content-section assembly-image" id="luke-overview" data-step="overview: parts — base, column, arm, top, gripper">
+  <img src="/Assembly00.jpg" alt="Luke overview, each robot arm has a base, column, arm and the 3-finger gripper" width="720" height="720" loading="lazy">
+</section>
+<section class="content-section assembly-image" id="luke-step-1" data-step="step 1: insert the lead screw into the base">
   <img src="/Assembly01.jpg" alt="Step 1: Insert the lead screw into the base" width="720" height="720" loading="lazy">
 </section>
-<section class="content-section assembly-image">
-  <img src="/Assembly02.jpg" alt="Step 2: Fit the lead-screw nut halves the right way up" width="720" height="720" loading="lazy">
+<section class="content-section assembly-image" id="luke-step-2" data-step="step 2: fit the lead-screw coupler halves so they interlock, rotate to make sure they fit together">
+  <img src="/Assembly02.jpg" alt="Step 2: Fit the lead-screw coupler halves so they interlock, rotate to make sure they fit together" width="720" height="720" loading="lazy">
 </section>
-<section class="content-section assembly-image">
-  <img src="/Assembly03.jpg" alt="Step 3: Fasten the lead-screw plate with four screws" width="720" height="720" loading="lazy">
+<section class="content-section assembly-image" id="luke-step-3" data-step="step 3: four screws to fix the lead-screw to the base">
+  <img src="/Assembly03.jpg" alt="Step 3: Fasten the lead-screw with four screws into the base securely" width="720" height="720" loading="lazy">
 </section>
-<section class="content-section assembly-image">
-  <img src="/Assembly04.jpg" alt="Step 4: Insert the four guide rods into the base" width="720" height="720" loading="lazy">
+<section class="content-section assembly-image" id="luke-step-4" data-step="step 4: four carbon fiber rods into the base">
+  <img src="/Assembly04.jpg" alt="Step 4: Insert the four carbon fiber rods into the base" width="720" height="720" loading="lazy">
 </section>
-<section class="content-section assembly-image">
-  <img src="/Assembly05.jpg" alt="Step 5: Slide the arm onto the lead screw and guide rods" width="720" height="720" loading="lazy">
+<section class="content-section assembly-image" id="luke-step-5" data-step="step 5: slide the arm onto the lead screw and rods">
+  <img src="/Assembly05.jpg" alt="Step 5: Slide the arm onto the lead screw and carbon fiber rods" width="720" height="720" loading="lazy">
 </section>
-<section class="content-section assembly-image">
-  <img src="/Assembly06.jpg" alt="Step 6: Clip the chain into the base" width="720" height="720" loading="lazy">
+<section class="content-section assembly-image" id="luke-step-6" data-step="step 6: clip the motor cable chain into the base, connect the motor cable itself">
+  <img src="/Assembly06.jpg" alt="Step 6: Clip the motor cable chain into the base, make sure the motor cable is connected!" width="720" height="720" loading="lazy">
 </section>
-<section class="content-section assembly-image">
-  <img src="/Assembly07.jpg" alt="Step 7: Fit the top plate onto the guide rods" width="720" height="720" loading="lazy">
+<section class="content-section assembly-image" id="luke-step-7" data-step="step 7: top plate onto the carbon fiber rods">
+  <img src="/Assembly07.jpg" alt="Step 7: Fit the top plate onto the carbon fiber rods" width="720" height="720" loading="lazy">
 </section>
-<section class="content-section assembly-image">
-  <img src="/Assembly08.jpg" alt="Step 8: Place the top pulley onto the shaft" width="720" height="720" loading="lazy">
+<section class="content-section assembly-image" id="luke-step-8" data-step="step 8: Top bearing onto the lead screw">
+  <img src="/Assembly08.jpg" alt="Step 8: Place the top bearing onto the top of the lead screw" width="720" height="720" loading="lazy">
 </section>
-<section class="content-section assembly-image">
-  <img src="/Assembly09.jpg" alt="Step 9: Secure the pulley with a retaining clip" width="720" height="720" loading="lazy">
+<section class="content-section assembly-image" id="luke-step-9" data-step="step 9: retaining e-ring on the lead screw">
+  <img src="/Assembly09.jpg" alt="Step 9: Secure the bearing with a retaining e-ring, use the provided tool to snap it in easily" width="720" height="720" loading="lazy">
 </section>
-<section class="content-section assembly-image">
+<section class="content-section assembly-image" id="luke-step-10" data-step="step 10: snap on the top cover">
   <img src="/Assembly10.jpg" alt="Step 10: Snap on the top cover" width="720" height="720" loading="lazy">
 </section>
-<section class="content-section assembly-image">
-  <img src="/Assembly11.jpg" alt="Step 11: Attach the gripper and plug in its cable" width="720" height="720" loading="lazy">
+<section class="content-section assembly-image" id="luke-step-11" data-step="step 11: attach gripper, plug cable">
+  <img src="/Assembly11.jpg" alt="Step 11: Attach the gripper to the end of the arm and plug in its cable" width="720" height="720" loading="lazy">
 </section>
-<section class="content-section assembly-image">
-  <img src="/Assembly12.jpg" alt="Step 12: Slide the column cover down over the rails" width="720" height="720" loading="lazy">
+<section class="content-section assembly-image" id="luke-step-12" data-step="step 12: slide the column cover down">
+  <img src="/Assembly12.jpg" alt="Step 12: Slide the column cover down over the column from the top until it clicks in at the bottom, which also connects the leds" width="720" height="720" loading="lazy">
 </section>
 
 <section class="content-section" id="poweron">

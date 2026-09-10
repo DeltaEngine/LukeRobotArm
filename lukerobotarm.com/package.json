@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "deploy": "npm run build && powershell -NoProfile -ExecutionPolicy Bypass -File ./deploy-iis.ps1"
+    "deploy": "npm run build && powershell -NoProfile -ExecutionPolicy Bypass -File ./deploy-iis.ps1",
+    "luke-chat-check": "node server/luke-chat.mjs --self-check",
+    "luke-chat": "node server/luke-chat.mjs --listen",
+    "luke-ping": "curl.exe -s http://localhost:5173/api/luke-session"
   },
   "devDependencies": {
     "typescript": "~5.8.3",

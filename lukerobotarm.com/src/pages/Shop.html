@@ -1,82 +1,161 @@
-<section class="content-section">
-  <p class="lead">
-    Choose the Luke that fits your workspace. Prices are target list prices in USD;
-    VAT/taxes and shipping are added at checkout depending on your country.
-  </p>
-</section>
+<div class="shop-config">
+  <div class="shop-stage">
+    <div class="shop-stage-frame" id="shopFrame">
+      <img class="shop-base" id="shopBase" src="/shop/LukeStandardBaseModel.jpg" alt="Luke">
+      <div class="shop-tint" id="shopTint" aria-hidden="true"></div>
+      <div class="shop-tint-b" id="shopTintB" aria-hidden="true"></div>
+      <div class="shop-cover" id="shopCover" aria-hidden="true"></div>
+      <img class="shop-on shop-on-camera" id="shopCam" src="/shop/AddonCamera.jpg" alt="">
+      <img class="shop-on shop-on-motors" id="shopMotors" src="/shop/ProMotors.jpg" alt="">
+      <img class="shop-corner shop-corner-gamepad" id="shopPad" src="/shop/GamePad.jpg" alt="Gamepad">
+      <img class="shop-corner shop-corner-chess" id="shopChess" src="/shop/ChessKit.jpg" alt="Chess kit">
+      <img class="shop-corner shop-corner-ludo" id="shopLudo" src="/shop/LudoKit.jpg" alt="Ludo kit">
+      <img class="shop-corner shop-corner-conveyor" id="shopBelt" src="/shop/ConveyorBelt.jpg" alt="Conveyor">
+    </div>
+    <p class="shop-caption" id="shopCaption"></p>
+  </div>
 
-<section class="product-grid">
-  <article class="shop-card featured">
-    <img src="/LukeRobotPhoto.jpg" alt="Luke Pro Robot Arm" />
-    <h3>Luke Pro</h3>
-    <p class="price">$899</p>
-    <p class="tag">Flagship build</p>
-    <p>
-      The full-quality arm we show to reviewers — top-notch parts including Feetech 3250-class
-      motors. Best performance and finish for demos, labs, and demanding daily use.
-    </p>
-    <ul>
-      <li>Premium actuators &amp; build quality</li>
-      <li>Full feature set &amp; web controller</li>
-      <li>Limited early production batches</li>
-    </ul>
-    <a class="cta-button" href="mailto:info@deltaengine.net?subject=Luke%20Pro%20inquiry">Inquire</a>
-  </article>
+  <form class="shop-opts" id="shopForm">
+    <div class="shop-group">
+      <button type="button" class="shop-pick" data-model="mini">
+        <span class="shop-pick-top"><b>Mini</b><em>From $249</em></span>
+        <small>Smaller robot arm (0.3m), weaker motors, simplified</small>
+      </button>
+      <button type="button" class="shop-pick" data-model="standard">
+        <span class="shop-pick-top"><b>Standard</b><em>From $499</em></span>
+        <small>Full robot arm (0.5m height, reach 0.5m), stronger motors, metal reinforced</small>
+      </button>
+      <button type="button" class="shop-pick" data-model="pro">
+        <span class="shop-pick-top"><b>Pro</b><em>$899</em></span>
+        <small>Strongest robot arm, everything from Standard, +strongest motors, all extras maxed out, +free customization, +one free kit</small>
+      </button>
+    </div>
 
-  <article class="shop-card">
-    <img src="/LukeRobotPhoto.jpg" alt="Luke Basic Robot Arm" />
-    <h3>Luke Basic</h3>
-    <p class="price">$699</p>
-    <p class="tag">$599 early-bird (Kickstarter)</p>
-    <p>
-      The accessible entry Luke with Feetech 3235-class motors — great for makers, classrooms,
-      and first automation projects without compromising the software experience.
-    </p>
-    <ul>
-      <li>Same web app &amp; control modes</li>
-      <li>Lower entry price</li>
-      <li>Ideal for learning &amp; light tasks</li>
-    </ul>
-    <a class="cta-button" href="mailto:info@deltaengine.net?subject=Luke%20Basic%20inquiry">Inquire</a>
-  </article>
+    <fieldset class="shop-group" id="shopColorMini">
+      <legend>Color</legend>
+      <div class="shop-swatches" id="miniPresets"></div>
+      <button type="button" class="shop-pick shop-pick-inline" data-mini-custom="1">
+        <span class="shop-pick-top"><b>Custom</b><em>+$29</em></span>
+        <small>16 extra colors and a print-bed effect.</small>
+      </button>
+      <div class="shop-extra" id="miniCustomPanel" hidden>
+        <p class="shop-label">Custom color</p>
+        <div class="shop-swatches" id="miniCustomSwatches"></div>
+        <p class="shop-label">Top-layer / bed</p>
+        <div class="shop-chips" id="miniBeds"></div>
+      </div>
+    </fieldset>
 
-  <article class="shop-card soon">
-    <img src="/LukeRobotPhoto.jpg" alt="Luke Mini Robot Arm" />
-    <h3>Luke Mini</h3>
-    <p class="price">$299</p>
-    <p class="tag">Coming soon</p>
-    <p>
-      A smaller, simplified arm — shorter links, lighter column, and more affordable motors
-      (Feetech 3215-class) for desks and compact work cells.
-    </p>
-    <ul>
-      <li>Compact footprint</li>
-      <li>Budget-friendly parts</li>
-      <li>Join the waitlist</li>
-    </ul>
-    <a class="cta-button secondary" href="mailto:info@deltaengine.net?subject=Luke%20Mini%20waitlist">Join waitlist</a>
-  </article>
-</section>
+    <fieldset class="shop-group" id="shopColorStd">
+      <legend>Color</legend>
+      <div class="shop-swatches" id="stdPresets"></div>
+      <button type="button" class="shop-pick shop-pick-inline" data-std-custom="1">
+        <span class="shop-pick-top"><b>Custom</b><em>Two-tone</em></span>
+        <small>Up to two colors, alternating parts (base, arm, gripper…).</small>
+      </button>
+      <div class="shop-extra" id="stdCustomPanel" hidden>
+        <p class="shop-label">Color 1 — base &amp; gripper</p>
+        <div class="shop-swatches" id="stdColor1"></div>
+        <p class="shop-label">Color 2 — arm</p>
+        <div class="shop-swatches" id="stdColor2"></div>
+      </div>
+    </fieldset>
 
-<section class="content-section">
-  <h3>What’s included</h3>
-  <ul class="feature-list">
-    <li>Assembled or kit options depending on campaign / SKU</li>
-    <li>On-board ESP32 server with Wi‑Fi setup</li>
-    <li>Access to this web controller (no app store install)</li>
-    <li>Docs, wiki guides, and open firmware on GitHub</li>
-  </ul>
-  <p class="note">
-    Shipping typically adds roughly €10–20 in Europe and more for US / worldwide.
-    Local VAT or import taxes apply. Exact totals depend on destination and payment provider.
-  </p>
-</section>
+    <fieldset class="shop-group">
+      <legend>Column cover</legend>
+      <p class="shop-note">Translucent cover. Same set on Mini, Standard, and Pro.</p>
+      <p class="shop-label">Tint</p>
+      <div class="shop-swatches" id="coverColors"></div>
+      <p class="shop-label">Pattern</p>
+      <div class="shop-chips" id="coverPatterns"></div>
+    </fieldset>
 
-<section class="content-section contact">
-  <h3>Business &amp; education</h3>
-  <p>
-    Need multiple units, classroom packs, or custom end effectors? Contact Delta Engine for
-    quotes and lead times.
-  </p>
-  <a class="cta-button" href="mailto:Support@DeltaEngine.net">Support@DeltaEngine.net</a>
-</section>
+    <fieldset class="shop-group" id="shopEssentials">
+      <legend>Essentials</legend>
+      <p class="shop-note">Pick a gripper. 2-finger costs the same as 3-finger; both together +$39.</p>
+      <label class="shop-check">
+        <input type="checkbox" name="finger2">
+        <span><b>2-finger gripper</b> <em id="priceFinger2"></em><small>Same price as 3-finger. Add it as a second gripper for +$39.</small></span>
+      </label>
+      <label class="shop-check">
+        <input type="checkbox" name="finger3">
+        <span><b>3-finger gripper</b> <em id="priceFinger3">Default</em><small>Default on all models. Pro includes the 4 DoF hand.</small></span>
+      </label>
+      <div id="shopGrip3">
+        <p class="shop-label">3-finger motion</p>
+        <button type="button" class="shop-pick shop-pick-inline" data-dof="simple">
+          <span class="shop-pick-top"><b>Simple</b><em id="priceDofSimple">Included</em></span>
+          <small>1 motor — grab only. Default on Mini and Standard.</small>
+        </button>
+        <button type="button" class="shop-pick shop-pick-inline" data-dof="rotate">
+          <span class="shop-pick-top"><b>Grab + rotation</b><em>+$39</em></span>
+          <small>2 motors — wrist twist.</small>
+        </button>
+        <button type="button" class="shop-pick shop-pick-inline" data-dof="4dof">
+          <span class="shop-pick-top"><b>4 DoF hand</b><em id="priceDof4">+$99</em></span>
+          <small>4 motors — rotation, pitch, plus gripper twist. Pro default.</small>
+        </button>
+      </div>
+      <label class="shop-check" id="optCamera">
+        <input type="checkbox" name="camera">
+        <span><b>Camera</b> <em id="priceCamera">+$29</em><small>On-arm camera. On for Standard and Pro; in the Pro price.</small></span>
+      </label>
+      <label class="shop-check" id="optGamepad">
+        <input type="checkbox" name="gamepad">
+        <span><b>Gamepad</b> <em id="priceGamepad">+$10</em><small>USB controller. On for Standard and Pro; in the Pro price.</small></span>
+      </label>
+    </fieldset>
+
+    <fieldset class="shop-group" id="shopKits">
+      <legend>Kits</legend>
+      <p class="shop-note" id="kitNote">More kits coming. Pro includes one $19 kit.</p>
+      <label class="shop-check">
+        <input type="checkbox" name="chess">
+        <span><b>Chess</b> <em id="priceChess">+$19</em><small>Board with 64 magnets and 32 magnetic pieces.</small></span>
+      </label>
+      <label class="shop-check">
+        <input type="checkbox" name="ludo">
+        <span><b>Ludo</b> <em id="priceLudo">+$19</em><small>Board with 100+ magnets and 4×4 colored pieces.</small></span>
+      </label>
+      <label class="shop-check">
+        <input type="checkbox" name="educational">
+        <span><b>Educational</b> <em id="priceEdu">+$19</em><small>Classroom tasks and demos. More kits later.</small></span>
+      </label>
+    </fieldset>
+
+    <fieldset class="shop-group" id="shopAddons">
+      <legend>Add-ons</legend>
+      <p class="shop-note">Never bundled — not even on Pro.</p>
+      <label class="shop-check">
+        <input type="checkbox" name="reach">
+        <span><b>Extended reach</b> <em>+$149</em><small>+20cm longer arm.</small></span>
+      </label>
+      <p class="shop-label">Column height</p>
+      <button type="button" class="shop-pick shop-pick-inline" data-height="500">
+        <span class="shop-pick-top"><b>500mm</b><em>Included</em></span>
+        <small>Standard column.</small>
+      </button>
+      <button type="button" class="shop-pick shop-pick-inline" data-height="700">
+        <span class="shop-pick-top"><b>700mm</b><em>+$99</em></span>
+        <small>Taller column.</small>
+      </button>
+      <button type="button" class="shop-pick shop-pick-inline" data-height="1000">
+        <span class="shop-pick-top"><b>1000mm</b><em>+$199</em></span>
+        <small>Full metre column.</small>
+      </button>
+      <label class="shop-check" id="optConveyor">
+        <input type="checkbox" name="conveyor">
+        <span><b>Conveyor belt</b> <em>+$149</em><small>Desk-size transport platform.</small></span>
+      </label>
+    </fieldset>
+
+    <div class="shop-buy">
+      <p class="shop-total" id="shopTotal">$499</p>
+      <ul class="shop-breakdown" id="shopBreakdown"></ul>
+      <a class="cta-button" id="shopInquire" href="mailto:Support@DeltaEngine.net">Inquire</a>
+      <button type="button" class="cta-button" id="shopOrder" hidden>Order</button>
+      <p class="shop-pay-dummy" id="shopPayDummy" hidden>PayPal, Stripe, and Amazon Pay — checkout next. Nothing is charged yet.</p>
+      <p class="shop-vat">USD. VAT/taxes and shipping extra.</p>
+    </div>
+  </form>
+</div>
