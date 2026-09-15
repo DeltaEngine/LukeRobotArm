@@ -109,8 +109,26 @@ export default function Guides() {
     if (parent && chat) parent.insertBefore(chat, container);
   });
 
+  const clips = [...container.querySelectorAll<HTMLVideoElement>('video.assembly-clip')];
+  const clipIo = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries) {
+        const v = e.target as HTMLVideoElement;
+        if (e.isIntersecting) void v.play().catch(() => undefined);
+        else v.pause();
+      }
+    },
+    { threshold: 0.4 },
+  );
+  for (const v of clips) {
+    v.muted = true;
+    clipIo.observe(v);
+  }
+
   const releaseAwake = keepScreenAwake();
   (container as unknown as { _cleanup?: () => void })._cleanup = () => {
+    clipIo.disconnect();
+    for (const v of clips) v.pause();
     releaseAwake();
     live.stop();
   };

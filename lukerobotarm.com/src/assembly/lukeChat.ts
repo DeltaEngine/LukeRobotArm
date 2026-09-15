@@ -44,7 +44,7 @@ export function sectionId(raw: string): string {
   if (s === 'poweron' || s === 'power-on' || s === 'power') return 'poweron';
   const n = s.match(/(\d{1,2})/);
   const num = n ? Number(n[1]) : 0;
-  if (num >= 1 && num <= 12) return `luke-step-${num}`;
+  if (num >= 1 && num <= 15) return `luke-step-${num}`;
   return 'poweron';
 }
 
@@ -740,6 +740,8 @@ export class LukeLive {
     ['overview', 'luke-overview'],
     ['1', 'luke-step-1'],
     ['luke-step-12', 'luke-step-12'],
+    ['15', 'luke-step-15'],
+    ['luke-step-15', 'luke-step-15'],
     ['poweron', 'poweron'],
     ['#poweron', 'poweron'],
   ];

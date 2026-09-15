@@ -471,7 +471,8 @@ button:focus-visible {
   margin-bottom: 1rem;
 }
 
-.assembly-image img {
+.assembly-image img,
+.assembly-image video {
   width: 100%;
   height: auto;
   aspect-ratio: 1;
@@ -1207,6 +1208,7 @@ footer a {
   }
 
   .assembly-image img,
+  .assembly-image video,
   .assembly-image iframe {
     border-radius: 0;
   }
