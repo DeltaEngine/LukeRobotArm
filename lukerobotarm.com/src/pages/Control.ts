@@ -1,4 +1,5 @@
 import { catalog } from '../catalog';
+import { getDiscoveredRobot, isLukeHostname } from '../discovery';
 import html from './Control.html?raw';
 import {
   connect,
@@ -10,6 +11,7 @@ import {
   onStatus,
   send,
   sendCommand,
+  setHost,
 } from '../robot';
 import { loadPage } from './loadPage';
 
@@ -63,7 +65,24 @@ export default function Connect() {
     if (s === 'connected' && !isVirtual()) showFound();
   });
 
-  if (isVirtual()) {
+  const discovered = getDiscoveredRobot();
+  const url = new URL(location.href);
+  const returnedHost = url.searchParams.get('luke') || '';
+  const selectedHost = isLukeHostname(returnedHost) ? returnedHost
+    : discovered?.ready ? discovered.host : isLukeHostname(getHost()) ? getHost() : '';
+  if (url.searchParams.has('luke')) {
+    url.searchParams.delete('luke');
+    history.replaceState(null, '', url);
+  }
+  if (selectedHost) {
+    disconnect(false);
+    setHost(selectedHost);
+    selectedId = 'luke';
+    renderRobots([{ id: 'luke', label: selectedHost.replace(/\.local$/i, '') }]);
+    statusEl.textContent = `${selectedHost} selected. Robot control is not connected yet.`;
+    // Discovery uses the firmware's HTTP API. Do not silently replace it with a virtual robot
+    // or send the unfinished WebSocket command protocol to this device.
+  } else if (isVirtual()) {
     selectedId = 'virtual';
     statusEl.textContent = 'No Luke found on your local Wi-Fi.';
     renderRobots([VIRTUAL_ROBOT]);
@@ -171,6 +190,10 @@ export default function Connect() {
   container.querySelector('#stopMoveBtn')?.addEventListener('click', () => {
     sendCommand('stop');
   });
+
+  if (selectedHost) {
+    container.querySelectorAll<HTMLButtonElement | HTMLInputElement>('button, input').forEach(el => { el.disabled = true; });
+  }
 
   (container as any)._cleanup = () => {
     window.clearTimeout(searchTimer);

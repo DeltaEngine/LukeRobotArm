@@ -1,4 +1,6 @@
 import html from './Assembly.html?raw';
+import { discoverRobot } from '../discovery';
+import { getHost, setHost } from '../robot';
 import { bindNavLinks, loadPage } from './loadPage';
 import { keepScreenAwake } from '../assembly/keepAwake';
 import { currentStepLabel, isGuidesAnchor, LukeLive, sectionId } from '../assembly/lukeChat';
@@ -75,6 +77,44 @@ export default function Assembly() {
   const stepCards = [...container.querySelectorAll<HTMLElement>('.step-card')];
 
   let currentStepIndex = 0;
+  const discoveryStatus = container.querySelector('#discoveryStatus') as HTMLElement;
+  let discoveryRequest: AbortController | null = null;
+  let discoveryTimer = 0;
+  let disposed = false;
+
+  function stopDiscovery() {
+    window.clearTimeout(discoveryTimer);
+    discoveryRequest?.abort();
+    discoveryRequest = null;
+  }
+
+  async function checkForRobot() {
+    if (disposed || currentStepIndex !== 14 || document.hidden || discoveryRequest) return;
+    window.clearTimeout(discoveryTimer);
+    const request = new AbortController();
+    discoveryRequest = request;
+    const robot = await discoverRobot(request.signal, getHost());
+    if (disposed || request.signal.aborted || currentStepIndex !== 14) return;
+    discoveryRequest = null;
+    if (robot?.ready) {
+      setHost(robot.host);
+      discoveryStatus.textContent = `${robot.id} is ready. Opening Control...`;
+      location.hash = '#control';
+      return;
+    }
+    discoveryStatus.textContent = robot
+      ? `${robot.id} found. Waiting for startup to finish...`
+      : 'Waiting for Luke on your home Wi-Fi. Allow local-network access if asked. If nothing appears, use Find Luke below.';
+    discoveryTimer = window.setTimeout(() => void checkForRobot(), 3000);
+  }
+  const resumeDiscovery = () => {
+    if (document.hidden) stopDiscovery();
+    else void checkForRobot();
+  };
+  window.addEventListener('online', resumeDiscovery);
+  window.addEventListener('focus', resumeDiscovery);
+  document.addEventListener('visibilitychange', resumeDiscovery);
+
   let lastRole: 'luke' | 'you' | '' = 'luke';
   let greetingDone = false;
   let greetingStarted = false;
@@ -137,6 +177,8 @@ export default function Assembly() {
     const changed = idx !== currentStepIndex;
     currentStepIndex = idx;
     const currentMeta = STEPS[idx];
+    stopDiscovery();
+    if (idx === 14) void checkForRobot();
 
     stepCards.forEach((card) => {
       const match = card.id === currentMeta.id;
@@ -241,6 +283,11 @@ export default function Assembly() {
 
   const releaseAwake = keepScreenAwake();
   (container as unknown as { _cleanup?: () => void })._cleanup = () => {
+    disposed = true;
+    stopDiscovery();
+    window.removeEventListener('online', resumeDiscovery);
+    window.removeEventListener('focus', resumeDiscovery);
+    document.removeEventListener('visibilitychange', resumeDiscovery);
     window.removeEventListener('luke-show-step', onShowStepEvent);
     stepCards.forEach((c) => {
       const v = c.querySelector<HTMLVideoElement>('video');

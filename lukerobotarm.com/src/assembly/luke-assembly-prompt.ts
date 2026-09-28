@@ -24,7 +24,7 @@ Step script (match the step animated video):
 - 11 / Assembly11: Attach the gripper to the end of the arm by twisting 10 degrees until it clicks, and plug in the gripper cable. Confirmation is if the gripper is properly attached and the cable is in.
 - 12 / Assembly12: Slide the column cover down over the column from the top until it clicks in at the bottom, which also connects the leds.
 - 13 / Assembly13: Plug the included 24V power brick into a wall socket, then connect the DC plug into the back of the base under the white sticker.
-- 14 / Assembly14: Open your device Wi-Fi setting and select Luke-<id>, which will open http://192.168.4.1 automatically to configure your Wi-Fi.
+- 14 / Assembly14: Open your device Wi-Fi setting and select Luke-<id>, which will open http://4.3.2.1 automatically to configure your Wi-Fi.
 
 Extra information in case the user has questions about the current step, here you are allowed to talk about previous steps or looking into the next step, which might sometimes solve the confusion the user has (e.g. screws are inserted in the next step, the cable is connected in the next step, etc.):
 - Overview: This is the packaging list in case the user asks about details on what is in the box: 
@@ -59,7 +59,7 @@ Extra information in case the user has questions about the current step, here yo
 - Step 11: Attach the gripper and connect its cable: plug in the gripper into the end of the arm by first twisting it by 10 degrees, sliding it in, and then straightening it till it clicks in. The gripper cable hangs off the left side of the gripper; plug it into the white socket under the arm next to the camera attachment. Confirmation is if the gripper is properly attached and the cable is in.
 - Step 12: In the final assembly step we have to press the column cover all the way down till it clicks in. It is easier to spread open the column cover shape to make it go over the column and slide it in from the top. Make sure the black cable channel is not in the way, press it inside while sliding the cover down.
 - Step 13: Plug the included 24V power brick into a power socket, then plug the barrel connector into the back of the robot base right under the white model sticker. Note: USB-C is for programming only; motors need 24V. Clear a 0.5m (1.6ft) area around the arm for the calibration sweep.
-- Step 14: Open device Wi-Fi settings and select the Luke-<id> network, which will open http://192.168.4.1 automatically to configure your Wi-Fi. After Wi-Fi setup is complete, the user is redirected to the Control page (#connect).
+- Step 14: Open device Wi-Fi settings and select the Luke-<id> network, which will open http://4.3.2.1 automatically to configure your Wi-Fi. After Wi-Fi setup, rejoin the home Wi-Fi and return to the original assembly browser tab. The assembly page checks for Luke on the home Wi-Fi and opens Control (#control) only once it finds a ready robot. Allow local-network access if asked. If automatic discovery is unavailable, use Find Luke. Keep one Luke powered during first-time setup. The sign-in window may close automatically; it cannot reliably redirect or reopen the browser.
 
 When they ask to go to a step, overview, power on, lead screw, gripper, Wi-Fi, call show_section with section ("overview", or "1" through "14") then one short sentence.`;
 
@@ -68,25 +68,25 @@ export const STEP_HINTS: Record<string, { step13: string; step14: string }> = {
     step13:
       'Stecken Sie das mitgelieferte 24V-Netzteil in eine Steckdose und verbinden Sie dann den DC-Stecker mit der Rückseite der Basis unter dem weißen Aufkleber.',
     step14:
-      'Öffnen Sie die WLAN-Einstellungen Ihres Geräts und wählen Sie das Netzwerk Luke-<id> aus. Dadurch wird automatisch http://192.168.4.1 geöffnet, um Ihr WLAN zu konfigurieren.',
+      'Öffnen Sie die WLAN-Einstellungen Ihres Geräts und wählen Sie das Netzwerk Luke-<id> aus. Dadurch wird automatisch http://4.3.2.1 geöffnet, um Ihr WLAN zu konfigurieren.',
   },
   es: {
     step13:
       'Enchufe la fuente de alimentación de 24V incluida a una toma de corriente y luego conecte el conector de CC en la parte posterior de la base debajo de la pegatina blanca.',
     step14:
-      'Abra la configuración de Wi-Fi de su dispositivo y seleccione la red Luke-<id>, que abrirá automáticamente http://192.168.4.1 para configurar su Wi-Fi.',
+      'Abra la configuración de Wi-Fi de su dispositivo y seleccione la red Luke-<id>, que abrirá automáticamente http://4.3.2.1 para configurar su Wi-Fi.',
   },
   fr: {
     step13:
       "Branchez le bloc d'alimentation 24V fourni sur une prise murale, puis connectez la prise CC à l'arrière de la base sous l'autocollant blanc.",
     step14:
-      'Ouvrez les paramètres Wi-Fi de votre appareil et sélectionnez le réseau Luke-<id>, ce qui ouvrira automatiquement http://192.168.4.1 pour configurer votre Wi-Fi.',
+      'Ouvrez les paramètres Wi-Fi de votre appareil et sélectionnez le réseau Luke-<id>, ce qui ouvrira automatiquement http://4.3.2.1 pour configurer votre Wi-Fi.',
   },
   en: {
     step13:
       'Plug the included 24V power brick into a wall socket, then connect the DC plug into the back of the base under the white sticker.',
     step14:
-      'Open your device Wi-Fi setting and select the Luke-<id> network, which will open http://192.168.4.1 automatically to configure your Wi-Fi.',
+      'Open your device Wi-Fi setting and select the Luke-<id> network, which will open http://4.3.2.1 automatically to configure your Wi-Fi.',
   },
 };
 
