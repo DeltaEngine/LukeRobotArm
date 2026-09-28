@@ -1,9 +1,6 @@
+import { catalog, priceOf, type AddonKey, type Model } from '../catalog';
 import html from './Shop.html?raw';
 import { loadPage } from './loadPage';
-
-type Model = 'mini' | 'standard' | 'pro';
-
-const BASE: Record<Model, number> = { mini: 249, standard: 499, pro: 899 };
 
 const MINI_PRESET: Record<string, string> = {
   black: '#1c1c1c',
@@ -141,110 +138,13 @@ function hexNamed(map: Record<string, string>, key: string): string {
   return map[key] || CUSTOM.find((c) => c.name === key)?.hex || '#c8cad0';
 }
 
-function priceOf(s: State) {
-  const pro = s.model === 'pro';
-  let n = BASE[s.model];
-  const lines: string[] = [`Luke ${label(s.model)} $${BASE[s.model]}`];
-  if (s.model === 'mini' && s.custom) {
-    n += 29;
-    lines.push('Custom color +$29');
-  } else if (pro && s.custom) {
-    lines.push('Custom colors included');
-  }
-
-  if (s.model !== 'mini') {
-    if (pro) {
-      if (s.camera) lines.push('Camera included');
-      else {
-        n -= 29;
-        lines.push('No camera −$29');
-      }
-      if (s.gamepad) lines.push('Gamepad included');
-      else {
-        n -= 10;
-        lines.push('No gamepad −$10');
-      }
-    } else {
-      if (s.camera) {
-        n += 29;
-        lines.push('Camera +$29');
-      }
-      if (s.gamepad) {
-        n += 10;
-        lines.push('Gamepad +$10');
-      }
-    }
-  }
-
-  const kits: Array<'chess' | 'ludo' | 'educational'> = [];
-  if (s.chess) kits.push('chess');
-  if (s.ludo) kits.push('ludo');
-  if (s.educational) kits.push('educational');
-  const free = pro && kits.length ? kits[0] : '';
-  if (pro && !kits.length) {
-    n -= 19;
-    lines.push('No kit −$19');
-  }
-  const kitLine = (id: typeof kits[number], name: string) => {
-    if (!kits.includes(id)) return;
-    lines.push(free === id ? `${name} included` : `${name} +$19`);
-  };
-  kitLine('chess', 'Chess kit');
-  kitLine('ludo', 'Ludo kit');
-  kitLine('educational', 'Educational kit');
-  n += kits.length * 19 - (free ? 19 : 0);
-
-  if (s.finger2 && s.finger3) {
-    n += 39;
-    lines.push('2- and 3-finger grippers +$39');
-  } else if (s.finger2) {
-    lines.push('2-finger gripper');
-  } else {
-    lines.push('3-finger gripper');
-  }
-  if (s.finger3) {
-    if (s.dof === 'rotate') {
-      n += 39;
-      if (pro) {
-        n -= 99;
-        lines.push('Grab + rotation +$39 (instead of 4 DoF −$99)');
-      } else {
-        lines.push('Grab + rotation +$39');
-      }
-    } else if (s.dof === '4dof') {
-      if (pro) lines.push('4 DoF gripper included');
-      else {
-        n += 99;
-        lines.push('4 DoF gripper +$99');
-      }
-    } else if (pro) {
-      n -= 99;
-      lines.push('Simple gripper −$99');
-    } else {
-      lines.push('Simple 3-finger gripper');
-    }
-  } else if (pro) {
-    n -= 99;
-    lines.push('No 3-finger gripper −$99');
-  }
-
-  if (s.model !== 'mini' && s.reach) {
-    n += 149;
-    lines.push('Extended reach +$149');
-  }
-  if (s.model !== 'mini' && s.height === 700) {
-    n += 99;
-    lines.push('700mm column +$99');
-  }
-  if (s.model !== 'mini' && s.height === 1000) {
-    n += 199;
-    lines.push('1000mm column +$199');
-  }
-  if (s.model !== 'mini' && s.conveyor) {
-    n += 149;
-    lines.push('Conveyor belt +$149');
-  }
-  return { n, lines, free };
+function paintFixed(root: ParentNode) {
+  const { models, addons } = catalog().prices;
+  root.querySelectorAll<HTMLElement>('[data-usd]').forEach((el) => {
+    const key = el.dataset.usd || '';
+    const n = key.startsWith('model:') ? models[key.slice(6) as Model] : addons[key as AddonKey];
+    el.textContent = `${el.dataset.prefix ?? '+$'}${n}`;
+  });
 }
 
 function label(m: Model) {
@@ -351,19 +251,21 @@ export default function Shop() {
     (root.querySelector('input[name="educational"]') as HTMLInputElement).checked = s.educational;
     (root.querySelector('input[name="conveyor"]') as HTMLInputElement).checked = s.conveyor;
 
-    const { n, lines, free } = priceOf(s);
+    paintFixed(root);
+    const a = catalog().prices.addons;
+    const { n, lines, free } = priceOf(s, catalog().prices);
     const camPrice = root.querySelector('#priceCamera') as HTMLElement;
     const padPrice = root.querySelector('#priceGamepad') as HTMLElement;
-    camPrice.textContent = pro ? (s.camera ? 'Included' : '−$29') : s.camera ? '+$29' : '';
-    padPrice.textContent = pro ? (s.gamepad ? 'Included' : '−$10') : s.gamepad ? '+$10' : 'Save $10';
-    (root.querySelector('#priceChess') as HTMLElement).textContent = free === 'chess' ? 'Included' : '+$19';
-    (root.querySelector('#priceLudo') as HTMLElement).textContent = free === 'ludo' ? 'Included' : '+$19';
-    (root.querySelector('#priceEdu') as HTMLElement).textContent = free === 'educational' ? 'Included' : '+$19';
-    (root.querySelector('#priceFinger2') as HTMLElement).textContent = s.finger2 && s.finger3 ? '+$39' : '';
+    camPrice.textContent = pro ? (s.camera ? 'Included' : `−$${a.camera}`) : s.camera ? `+$${a.camera}` : '';
+    padPrice.textContent = pro ? (s.gamepad ? 'Included' : `−$${a.gamepad}`) : s.gamepad ? `+$${a.gamepad}` : `Save $${a.gamepad}`;
+    (root.querySelector('#priceChess') as HTMLElement).textContent = free === 'chess' ? 'Included' : `+$${a.kit}`;
+    (root.querySelector('#priceLudo') as HTMLElement).textContent = free === 'ludo' ? 'Included' : `+$${a.kit}`;
+    (root.querySelector('#priceEdu') as HTMLElement).textContent = free === 'educational' ? 'Included' : `+$${a.kit}`;
+    (root.querySelector('#priceFinger2') as HTMLElement).textContent = s.finger2 && s.finger3 ? `+$${a.secondGripper}` : '';
     (root.querySelector('#priceFinger3') as HTMLElement).textContent =
       s.finger2 && s.finger3 ? 'Second gripper' : 'Default';
-    (root.querySelector('#priceDofSimple') as HTMLElement).textContent = pro ? '−$99' : 'Included';
-    (root.querySelector('#priceDof4') as HTMLElement).textContent = pro ? 'Included' : '+$99';
+    (root.querySelector('#priceDofSimple') as HTMLElement).textContent = pro ? `−$${a.dof4}` : 'Included';
+    (root.querySelector('#priceDof4') as HTMLElement).textContent = pro ? 'Included' : `+$${a.dof4}`;
 
     base.src = mini ? '/shop/LukeMiniBaseModel.jpg' : '/shop/LukeStandardBaseModel.jpg';
     base.alt = `Luke ${label(s.model)}`;

@@ -52,10 +52,10 @@ for ($i = $rules.Count - 1; $i -ge 0; $i--) {
 $rule = $rules.CreateElement('rule')
 $rule.SetAttributeValue('name', 'Luke session API')
 $rule.SetAttributeValue('stopProcessing', $true)
-$rule.GetChildElement('match').SetAttributeValue('url', '^api/luke-(session|chat)(.*)')
+$rule.GetChildElement('match').SetAttributeValue('url', '^api/(luke-(session|chat)|catalog)(.*)')
 $action = $rule.GetChildElement('action')
 $action.SetAttributeValue('type', 'Rewrite')
-$action.SetAttributeValue('url', 'http://127.0.0.1:8787/api/luke-{R:1}{R:2}')
+$action.SetAttributeValue('url', 'http://127.0.0.1:8787/{R:0}')
 $rules.Add($rule)
 $mgr.CommitChanges()
 Write-Host 'Wrote rewrite + detailed errors to applicationHost.'

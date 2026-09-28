@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "deploy": "npm run build && powershell -NoProfile -ExecutionPolicy Bypass -File ./deploy-iis.ps1",
     "luke-chat-check": "node server/luke-chat.mjs --self-check",
+    "prices-check": "node server/prices.mjs --self-check",
     "luke-chat": "node server/luke-chat.mjs --listen",
     "luke-ping": "curl.exe -s http://localhost:5173/api/luke-session"
   },
@@ -17,6 +18,7 @@
     "vite": "^7.0.4"
   },
   "dependencies": {
-    "js-aruco": "^0.1.0"
+    "js-aruco": "^0.1.0",
+    "mongodb": "^6.21.0"
   }
 }

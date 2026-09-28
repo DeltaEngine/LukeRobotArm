@@ -18,15 +18,15 @@
   <form class="shop-opts" id="shopForm">
     <div class="shop-group">
       <button type="button" class="shop-pick" data-model="mini">
-        <span class="shop-pick-top"><b>Mini</b><em>From $249</em></span>
+        <span class="shop-pick-top"><b>Mini</b><em data-usd="model:mini" data-prefix="From $"></em></span>
         <small>Smaller robot arm (0.3m), weaker motors, simplified</small>
       </button>
       <button type="button" class="shop-pick" data-model="standard">
-        <span class="shop-pick-top"><b>Standard</b><em>From $499</em></span>
+        <span class="shop-pick-top"><b>Standard</b><em data-usd="model:standard" data-prefix="From $"></em></span>
         <small>Full robot arm (0.5m height, reach 0.5m), stronger motors, metal reinforced</small>
       </button>
       <button type="button" class="shop-pick" data-model="pro">
-        <span class="shop-pick-top"><b>Pro</b><em>$899</em></span>
+        <span class="shop-pick-top"><b>Pro</b><em data-usd="model:pro" data-prefix="$"></em></span>
         <small>Strongest robot arm, everything from Standard, +strongest motors, all extras maxed out, +free customization, +one free kit</small>
       </button>
     </div>
@@ -35,7 +35,7 @@
       <legend>Color</legend>
       <div class="shop-swatches" id="miniPresets"></div>
       <button type="button" class="shop-pick shop-pick-inline" data-mini-custom="1">
-        <span class="shop-pick-top"><b>Custom</b><em>+$29</em></span>
+        <span class="shop-pick-top"><b>Custom</b><em data-usd="customColor"></em></span>
         <small>16 extra colors and a print-bed effect.</small>
       </button>
       <div class="shop-extra" id="miniCustomPanel" hidden>
@@ -72,10 +72,10 @@
 
     <fieldset class="shop-group" id="shopEssentials">
       <legend>Essentials</legend>
-      <p class="shop-note">Pick a gripper. 2-finger costs the same as 3-finger; both together +$39.</p>
+      <p class="shop-note">Pick a gripper. 2-finger costs the same as 3-finger; both together <span data-usd="secondGripper"></span>.</p>
       <label class="shop-check">
         <input type="checkbox" name="finger2">
-        <span><b>2-finger gripper</b> <em id="priceFinger2"></em><small>Same price as 3-finger. Add it as a second gripper for +$39.</small></span>
+        <span><b>2-finger gripper</b> <em id="priceFinger2"></em><small>Same price as 3-finger. Add it as a second gripper for <span data-usd="secondGripper"></span>.</small></span>
       </label>
       <label class="shop-check">
         <input type="checkbox" name="finger3">
@@ -88,38 +88,38 @@
           <small>1 motor — grab only. Default on Mini and Standard.</small>
         </button>
         <button type="button" class="shop-pick shop-pick-inline" data-dof="rotate">
-          <span class="shop-pick-top"><b>Grab + rotation</b><em>+$39</em></span>
+          <span class="shop-pick-top"><b>Grab + rotation</b><em data-usd="rotate"></em></span>
           <small>2 motors — wrist twist.</small>
         </button>
         <button type="button" class="shop-pick shop-pick-inline" data-dof="4dof">
-          <span class="shop-pick-top"><b>4 DoF hand</b><em id="priceDof4">+$99</em></span>
+          <span class="shop-pick-top"><b>4 DoF hand</b><em id="priceDof4"></em></span>
           <small>4 motors — rotation, pitch, plus gripper twist. Pro default.</small>
         </button>
       </div>
       <label class="shop-check" id="optCamera">
         <input type="checkbox" name="camera">
-        <span><b>Camera</b> <em id="priceCamera">+$29</em><small>On-arm camera. On for Standard and Pro; in the Pro price.</small></span>
+        <span><b>Camera</b> <em id="priceCamera"></em><small>On-arm camera. On for Standard and Pro; in the Pro price.</small></span>
       </label>
       <label class="shop-check" id="optGamepad">
         <input type="checkbox" name="gamepad">
-        <span><b>Gamepad</b> <em id="priceGamepad">+$10</em><small>USB controller. On for Standard and Pro; in the Pro price.</small></span>
+        <span><b>Gamepad</b> <em id="priceGamepad"></em><small>USB controller. On for Standard and Pro; in the Pro price.</small></span>
       </label>
     </fieldset>
 
     <fieldset class="shop-group" id="shopKits">
       <legend>Kits</legend>
-      <p class="shop-note" id="kitNote">More kits coming. Pro includes one $19 kit.</p>
+      <p class="shop-note" id="kitNote">More kits coming. Pro includes one <span data-usd="kit" data-prefix="$"></span> kit.</p>
       <label class="shop-check">
         <input type="checkbox" name="chess">
-        <span><b>Chess</b> <em id="priceChess">+$19</em><small>Board with 64 magnets and 32 magnetic pieces.</small></span>
+        <span><b>Chess</b> <em id="priceChess"></em><small>Board with 64 magnets and 32 magnetic pieces.</small></span>
       </label>
       <label class="shop-check">
         <input type="checkbox" name="ludo">
-        <span><b>Ludo</b> <em id="priceLudo">+$19</em><small>Board with 100+ magnets and 4×4 colored pieces.</small></span>
+        <span><b>Ludo</b> <em id="priceLudo"></em><small>Board with 100+ magnets and 4×4 colored pieces.</small></span>
       </label>
       <label class="shop-check">
         <input type="checkbox" name="educational">
-        <span><b>Educational</b> <em id="priceEdu">+$19</em><small>Classroom tasks and demos. More kits later.</small></span>
+        <span><b>Educational</b> <em id="priceEdu"></em><small>Classroom tasks and demos. More kits later.</small></span>
       </label>
     </fieldset>
 
@@ -128,7 +128,7 @@
       <p class="shop-note">Never bundled — not even on Pro.</p>
       <label class="shop-check">
         <input type="checkbox" name="reach">
-        <span><b>Extended reach</b> <em>+$149</em><small>+20cm longer arm.</small></span>
+        <span><b>Extended reach</b> <em data-usd="reach"></em><small>+20cm longer arm.</small></span>
       </label>
       <p class="shop-label">Column height</p>
       <button type="button" class="shop-pick shop-pick-inline" data-height="500">
@@ -136,21 +136,21 @@
         <small>Standard column.</small>
       </button>
       <button type="button" class="shop-pick shop-pick-inline" data-height="700">
-        <span class="shop-pick-top"><b>700mm</b><em>+$99</em></span>
+        <span class="shop-pick-top"><b>700mm</b><em data-usd="column700"></em></span>
         <small>Taller column.</small>
       </button>
       <button type="button" class="shop-pick shop-pick-inline" data-height="1000">
-        <span class="shop-pick-top"><b>1000mm</b><em>+$199</em></span>
+        <span class="shop-pick-top"><b>1000mm</b><em data-usd="column1000"></em></span>
         <small>Full metre column.</small>
       </button>
       <label class="shop-check" id="optConveyor">
         <input type="checkbox" name="conveyor">
-        <span><b>Conveyor belt</b> <em>+$149</em><small>Desk-size transport platform.</small></span>
+        <span><b>Conveyor belt</b> <em data-usd="conveyor"></em><small>Desk-size transport platform.</small></span>
       </label>
     </fieldset>
 
     <div class="shop-buy">
-      <p class="shop-total" id="shopTotal">$499</p>
+      <p class="shop-total" id="shopTotal"></p>
       <ul class="shop-breakdown" id="shopBreakdown"></ul>
       <a class="cta-button" id="shopInquire" href="mailto:Support@DeltaEngine.net">Inquire</a>
       <button type="button" class="cta-button" id="shopOrder" hidden>Order</button>

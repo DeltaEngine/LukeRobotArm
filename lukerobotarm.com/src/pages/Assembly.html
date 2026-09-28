@@ -1,0 +1,120 @@
+<div class="assembly-wizard">
+  <!-- Top: Expanded, scrollable chat -->
+  <aside class="ask-luke" id="askLuke">
+    <ol class="ask-luke-log" id="askLukeLog">
+      <li class="luke">Hi, I am Luke, I can guide you through the assembly of the robot arm. Enable your microphone and say start to begin.</li>
+    </ol>
+    <form class="ask-luke-row" id="askLukeForm">
+      <button type="button" id="askLukeMic" class="btn-secondary" aria-pressed="false">Enable mic</button>
+      <input id="askLukeInput" type="text" placeholder="Type or talk to Luke…" autocomplete="off" />
+      <button type="submit" id="askLukeSend" class="btn-primary">Ask</button>
+    </form>
+    <p class="ask-luke-error" id="askLukeError" hidden></p>
+  </aside>
+
+  <!-- Middle: Single active step viewer -->
+  <div class="step-viewer" id="stepViewer">
+    <div class="step-card active" id="luke-overview" data-step="overview: parts — base, column, arm, top, gripper">
+      <img src="/Assembly00.jpg" alt="Parts overview" width="720" height="720" class="step-media">
+    </div>
+
+    <div class="step-card" id="luke-step-1" data-step="step 1: insert lead screw into base and align coupler until flush">
+      <video class="assembly-clip step-media" muted loop playsinline preload="auto" poster="/Assembly01.jpg" width="720" height="720">
+        <source src="/Assembly01.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="step-card" id="luke-step-2" data-step="step 2: fasten lead screw with four screws">
+      <video class="assembly-clip step-media" muted loop playsinline preload="auto" poster="/Assembly02.jpg" width="720" height="720">
+        <source src="/Assembly02.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="step-card" id="luke-step-3" data-step="step 3: insert first carbon fiber rod into base">
+      <video class="assembly-clip step-media" muted loop playsinline preload="auto" poster="/Assembly03.jpg" width="720" height="720">
+        <source src="/Assembly03.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="step-card" id="luke-step-4" data-step="step 4: slide arm onto lead screw and rod, rotate 10 times">
+      <video class="assembly-clip step-media" muted loop playsinline preload="auto" poster="/Assembly04.jpg" width="720" height="720">
+        <source src="/Assembly04.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="step-card" id="luke-step-5" data-step="step 5: clip motor cable chain and connect 3-pin motor cable">
+      <video class="assembly-clip step-media" muted loop playsinline preload="auto" poster="/Assembly05.jpg" width="720" height="720">
+        <source src="/Assembly05.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="step-card" id="luke-step-6" data-step="step 6: insert remaining three carbon rods into base">
+      <video class="assembly-clip step-media" muted loop playsinline preload="auto" poster="/Assembly06.jpg" width="720" height="720">
+        <source src="/Assembly06.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="step-card" id="luke-step-7" data-step="step 7: fit top plate C3 with marking facing up and back">
+      <video class="assembly-clip step-media" muted loop playsinline preload="auto" poster="/Assembly07.jpg" width="720" height="720">
+        <source src="/Assembly07.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="step-card" id="luke-step-8" data-step="step 8: press top bearing onto lead screw with yellow tool">
+      <video class="assembly-clip step-media" muted loop playsinline preload="auto" poster="/Assembly08.jpg" width="720" height="720">
+        <source src="/Assembly08.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="step-card" id="luke-step-9" data-step="step 9: snap retaining E-ring on top of lead screw">
+      <video class="assembly-clip step-media" muted loop playsinline preload="auto" poster="/Assembly09.jpg" width="720" height="720">
+        <source src="/Assembly09.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="step-card" id="luke-step-10" data-step="step 10: snap on top cover C4">
+      <video class="assembly-clip step-media" muted loop playsinline preload="auto" poster="/Assembly10.jpg" width="720" height="720">
+        <source src="/Assembly10.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="step-card" id="luke-step-11" data-step="step 11: twist gripper 10 degrees, click onto arm and plug in cable">
+      <video class="assembly-clip step-media" muted loop playsinline preload="auto" poster="/Assembly11.jpg" width="720" height="720">
+        <source src="/Assembly11.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="step-card" id="luke-step-12" data-step="step 12: slide column cover down until it clicks into base">
+      <video class="assembly-clip step-media" muted loop playsinline preload="auto" poster="/Assembly12.jpg" width="720" height="720">
+        <source src="/Assembly12.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <!-- Step 13: Power on -->
+    <div class="step-card step-card-info" id="luke-step-13" data-step="step 13: connect 24V power brick to base">
+      <video class="assembly-clip step-media" muted loop playsinline preload="auto" poster="/Assembly13.jpg" width="720" height="720">
+        <source src="/Assembly13.mp4" type="video/mp4">
+      </video>
+      <div class="step-info-panel">
+        <p>Plug the included 24V power brick into a wall socket, then connect the DC plug into the back of the base under the white sticker.</p>
+      </div>
+    </div>
+
+    <!-- Step 14: Wi-Fi Setup -->
+    <div class="step-card step-card-info" id="luke-step-14" data-step="step 14: switch to Luke Wi-Fi network">
+      <video class="assembly-clip step-media" muted loop playsinline preload="auto" poster="/Assembly14.jpg" width="720" height="720">
+        <source src="/Assembly14.mp4" type="video/mp4">
+      </video>
+      <div class="step-info-panel">
+        <p>Open your device Wi-Fi setting and select Luke-&lt;id&gt;, which will open http://192.168.4.1 automatically to configure your Wi-Fi.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom: Fixed navigation controls -->
+  <nav class="step-footer-nav" id="stepFooterNav" aria-label="Assembly Step Navigation">
+    <button type="button" class="btn-secondary" id="prevStepBtn" aria-label="Previous step">&lt; Overview</button>
+    <span class="step-indicator" id="stepIndicator"><strong>Step 1</strong></span>
+    <button type="button" class="btn-primary" id="nextStepBtn" aria-label="Next step">Step 2 &gt;</button>
+  </nav>
+</div>

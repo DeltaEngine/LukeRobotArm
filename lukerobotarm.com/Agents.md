@@ -34,13 +34,13 @@ Luke is a low-cost SCARA-style robot arm (RPRR, optional extra wrist twist) from
 lukerobotarm.com is the product site and the controller (https://lukerobotarm.com), Vite + TypeScript. No native app. Phone or laptop talks to the arm over Wi‑Fi. Firmware lives in ../Server — do not edit dist/.
 
 Web app pages: Hash-routed SPA. pageMap keys: #overview, #guides, #connect, #shop, #voice, #camera, #modules. Nav label is Connect; hash is #connect (Control.ts). Overview/Guides still link #control, which is not in pageMap — bug, do not copy.
-• Overview — product story, hero video, why Luke, contact. Price line "$299–$599" is Mini–Kickstarter band, not shop list prices.
+• Overview — product story, hero video, why Luke, contact. The "affordable" price band is Mini–Standard base from the shared catalog (GET /api/catalog), not a separate marketing number.
 • Get Started — assembly photos/video, power-on, Wi‑Fi setup
 • Connect — WebSocket client to ws://<host>/ws (default 192.168.4.1). Joint sliders (base, shoulder, Z, wrist, gripper), home, gripper, status. Shared connection: src/robot.ts
 • Voice — speech → JSON { voice: transcript }
 • Camera — phone camera + AprilTag/ArUco pose (tag on the arm). Detection still WIP (Camera_README.md describes mock); js-aruco / public/apriltag WASM are in the tree
 • Modules — recorded moves / AI-style workflows
-• Shop — Luke Pro $899 (Feetech 3250), Basic $699 / $599 early-bird (3235), Mini $299 coming soon (3215)
+• Shop — same catalog. Seed (until Mongo says otherwise): Mini $249, Standard $499, Pro $899, plus add-ons in server/price-math.mjs. Connect joint limits are the `control` collection in the same database. Assembly copy stays in the page.
 
 Deploy: Vite build + IIS (deploy-iis.ps1).
 

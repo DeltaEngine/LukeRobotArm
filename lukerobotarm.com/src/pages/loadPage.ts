@@ -14,8 +14,8 @@ export function loadPage(html: string, className = 'page'): HTMLElement {
 
 const PAGE_BTN: Record<string, string> = {
   overview: 'overviewBtn',
-  guides: 'guidesBtn',
-  assembly: 'guidesBtn',
+  guides: 'assemblyBtn',
+  assembly: 'assemblyBtn',
   connect: 'connectBtn',
   control: 'connectBtn',
   shop: 'shopBtn',

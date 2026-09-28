@@ -1,5 +1,6 @@
 import { defineConfig, loadEnv } from 'vite';
 import { handleLukeRequest, isLukeApi } from './server/luke-chat.mjs';
+import { handleCatalogRequest, isCatalogApi } from './server/prices.mjs';
 
 function maskKey(key: string) {
   if (!key) return 'MISSING';
@@ -7,7 +8,7 @@ function maskKey(key: string) {
   return `${key.slice(0, 4)}…${key.slice(-4)}`;
 }
 
-function lukeChatPlugin(apiKey: string, debug: boolean) {
+function lukeChatPlugin(apiKey: string, debug: boolean, mongoUrl: string) {
   const env = { apiKey, debug };
 
   function attach(server: {
@@ -20,6 +21,25 @@ function lukeChatPlugin(apiKey: string, debug: boolean) {
       end: (s?: string) => void;
     }, next: () => void) => {
       const url = req.originalUrl || req.url || '';
+      if (isCatalogApi(url)) {
+        if (mongoUrl) process.env.LUKE_MONGO_URL ||= mongoUrl;
+        console.log(`[catalog] ${req.method} ${url.split('?')[0]}`);
+        void handleCatalogRequest(req)
+          .then((out) => {
+            if (res.headersSent) return;
+            res.statusCode = out.status;
+            res.setHeader('Content-Type', 'application/json');
+            res.setHeader('Cache-Control', 'no-store');
+            res.end(out.json ? JSON.stringify(out.json) : '');
+          })
+          .catch((err: unknown) => {
+            if (res.headersSent) return;
+            res.statusCode = 500;
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify({ error: String(err) }));
+          });
+        return;
+      }
       if (!isLukeApi(url)) {
         next();
         return;
@@ -61,8 +81,9 @@ function lukeChatPlugin(apiKey: string, debug: boolean) {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   const apiKey = env.GEMINI_API_KEY || env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || '';
+  const mongoUrl = env.LUKE_MONGO_URL || process.env.LUKE_MONGO_URL || '';
   const debug = mode !== 'production';
   return {
-    plugins: [lukeChatPlugin(apiKey, debug)],
+    plugins: [lukeChatPlugin(apiKey, debug, mongoUrl)],
   };
 });

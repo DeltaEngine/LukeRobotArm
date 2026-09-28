@@ -11,6 +11,7 @@ import http from 'node:http';
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { handleCatalogRequest, isCatalogApi } from './prices.mjs';
 
 const MODEL = 'gemini-3.1-flash-live-preview';
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -118,13 +119,13 @@ export function liveSetup(lang, maxOutputTokens) {
           {
             name: 'show_section',
             description:
-              'Scroll the assembly page to a section. overview = parts photo (Assembly00). 1–12 = assembly steps (Assembly01–12). poweron = Power on & connect (24V, Wi-Fi, Control page, gamepad).',
+              'Show the assembly step on the page. overview = parts photo (Assembly00). 1–12 = physical assembly steps (Assembly01–12). 13 = power on 24V (Assembly13). 14 = Wi-Fi setup (Assembly14).',
             parameters: {
               type: 'OBJECT',
               properties: {
                 section: {
                   type: 'STRING',
-                  description: 'overview, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, or poweron',
+                  description: 'overview, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, or poweron',
                 },
               },
               required: ['section'],
@@ -428,6 +429,12 @@ if (process.argv.includes('--listen')) {
       res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-Luke-User, X-Luke-Lang');
       res.setHeader('X-Luke', 'chat');
       try {
+        if (isCatalogApi(req.url || '')) {
+          const cat = await handleCatalogRequest(req);
+          res.writeHead(cat.status, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
+          res.end(cat.json ? JSON.stringify(cat.json) : '');
+          return;
+        }
         const out = await handleLukeRequest(req, { apiKey, debug });
         res.writeHead(out.status, { 'Content-Type': 'application/json' });
         res.end(out.json ? JSON.stringify(out.json) : '');

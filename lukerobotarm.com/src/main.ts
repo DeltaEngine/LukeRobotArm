@@ -1,10 +1,11 @@
 import './style.css';
+import { loadCatalog } from './catalog';
 import Overview from './pages/Overview';
 import Control from './pages/Control';
 import Voice from './pages/Voice';
 import Camera from './pages/Camera';
 import Modules from './pages/Modules';
-import Guides from './pages/Guides';
+import Assembly from './pages/Assembly';
 import Shop from './pages/Shop';
 import { isGuidesAnchor, scrollLukeSection } from './assembly/lukeChat';
 
@@ -14,7 +15,8 @@ let currentPage = 'overview';
 
 const pageMap: Record<string, () => HTMLElement> = {
   overview: Overview,
-  guides: Guides,
+  assembly: Assembly,
+  guides: Assembly,
   connect: Control,
   shop: Shop,
   voice: Voice,
@@ -22,11 +24,11 @@ const pageMap: Record<string, () => HTMLElement> = {
   modules: Modules,
 };
 
-const hashAliases: Record<string, string> = { control: 'connect', assembly: 'guides' };
+const hashAliases: Record<string, string> = { control: 'connect', guides: 'assembly' };
 
 const menuButtons = [
   'overviewBtn',
-  'guidesBtn',
+  'assemblyBtn',
   'connectBtn',
   'shopBtn',
 ];
@@ -34,7 +36,7 @@ const menuButtons = [
 function resolvePage(raw: string): string {
   const key = hashAliases[raw] ?? raw;
   if (pageMap[key]) return key;
-  return isGuidesAnchor(raw) ? 'guides' : '';
+  return isGuidesAnchor(raw) ? 'assembly' : '';
 }
 
 function setActiveButton(page: string) {
@@ -72,7 +74,7 @@ function showPage(raw: string) {
   if (!isGuidesAnchor(fragment) && fragment !== page) {
     history.replaceState(null, '', `#${page}`);
   }
-  if (page === 'guides' && isGuidesAnchor(fragment)) {
+  if (page === 'assembly' && isGuidesAnchor(fragment)) {
     requestAnimationFrame(() => scrollLukeSection(fragment));
   }
 }
@@ -89,7 +91,7 @@ function initialPage(): string {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  showPage(initialPage());
+  void loadCatalog().finally(() => showPage(initialPage()));
 });
 
 window.addEventListener('hashchange', () => {
@@ -107,7 +109,7 @@ window.addEventListener('hashchange', () => {
 if (import.meta.hot) {
   const hmrPages = [
     { path: './pages/Overview', key: 'overview' },
-    { path: './pages/Guides', key: 'guides' },
+    { path: './pages/Assembly', key: 'assembly' },
     { path: './pages/Control', key: 'connect' },
     { path: './pages/Shop', key: 'shop' },
     { path: './pages/Voice', key: 'voice' },

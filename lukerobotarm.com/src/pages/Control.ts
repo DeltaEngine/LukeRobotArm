@@ -1,3 +1,4 @@
+import { catalog } from '../catalog';
 import html from './Control.html?raw';
 import {
   connect,
@@ -11,22 +12,6 @@ import {
   sendCommand,
 } from '../robot';
 import { loadPage } from './loadPage';
-
-interface JointDef {
-  id: string;
-  label: string;
-  min: number;
-  max: number;
-  value: number;
-}
-
-const JOINTS: JointDef[] = [
-  { id: 'j1', label: 'Base (θ1)', min: -180, max: 180, value: 0 },
-  { id: 'j2', label: 'Shoulder (θ2)', min: -90, max: 90, value: 0 },
-  { id: 'j3', label: 'Z height', min: 0, max: 100, value: 50 },
-  { id: 'j4', label: 'Wrist', min: -180, max: 180, value: 0 },
-  { id: 'j5', label: 'Gripper', min: 0, max: 100, value: 50 },
-];
 
 type RobotChoice = { id: string; label: string; virtual?: boolean };
 
@@ -98,7 +83,8 @@ export default function Connect() {
   const jointTable = container.querySelector('#jointTable') as HTMLElement;
   const jointState: Record<string, number> = {};
 
-  JOINTS.forEach((j) => {
+  // Limits come from the catalog (Mongo `control` collection). Firmware still has to clamp.
+  catalog().control.joints.forEach((j) => {
     jointState[j.id] = j.value;
     const row = document.createElement('div');
     row.className = 'joint-row';

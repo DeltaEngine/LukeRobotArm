@@ -13,7 +13,7 @@ function isHiddenNudge(s: string): boolean {
   return (
     s.startsWith('Greet me now') ||
     s.startsWith('Speak ONLY this') ||
-    s.startsWith('Continue immediately with step') ||
+    s.startsWith('Continue immediately with') ||
     GREETING_NUDGE.startsWith(s)
   );
 }
@@ -41,19 +41,30 @@ export function sectionId(raw: string): string {
     .toLowerCase()
     .replace(/^#/, '');
   if (s === 'overview' || s === '0' || s === '00' || s === 'luke-overview') return 'luke-overview';
-  if (s === 'poweron' || s === 'power-on' || s === 'power') return 'poweron';
+  if (s === 'poweron' || s === 'power-on' || s === 'power' || s === '13' || s === 'luke-step-13') return 'luke-step-13';
+  if (s === 'wifi' || s === 'wi-fi' || s === 'connect' || s === '14' || s === 'luke-step-14') return 'luke-step-14';
   const n = s.match(/(\d{1,2})/);
   const num = n ? Number(n[1]) : 0;
-  if (num >= 1 && num <= 15) return `luke-step-${num}`;
-  return 'poweron';
+  if (num >= 1 && num <= 14) return `luke-step-${num}`;
+  if (num === 16) return 'luke-step-13';
+  if (num === 17) return 'luke-step-14';
+  return 'luke-overview';
 }
 
 export function isGuidesAnchor(raw: string): boolean {
   const id = String(raw || '')
     .replace(/^#/, '')
     .toLowerCase();
-  return id === 'poweron' || id === 'luke-overview' || /^luke-step-\d{1,2}$/.test(id);
+  return (
+    id === 'poweron' ||
+    id === 'wifi' ||
+    id === 'luke-overview' ||
+    id === 'overview' ||
+    /^luke-step-\d{1,2}$/.test(id) ||
+    /^(step-)?([1-9]|1[0-4])$/.test(id)
+  );
 }
+export const isAssemblyAnchor = isGuidesAnchor;
 
 export function lukeUserId(): string {
   try {
@@ -68,7 +79,9 @@ export function lukeUserId(): string {
 }
 
 export function currentStepLabel(root: ParentNode): string {
-  const images = [...root.querySelectorAll<HTMLElement>('.assembly-image[data-step]')];
+  const active = root.querySelector<HTMLElement>('.step-card.active[data-step]');
+  if (active) return active.dataset.step || '';
+  const images = [...root.querySelectorAll<HTMLElement>('.assembly-image[data-step], .step-card[data-step]')];
   if (!images.length) return '';
   const scroller = document.querySelector('.content');
   const box = scroller?.getBoundingClientRect();
@@ -92,6 +105,8 @@ export function pauseAssemblyVideo(root: ParentNode) {
     JSON.stringify({ event: 'command', func: 'pauseVideo', args: [] }),
     '*',
   );
+  const activeVideo = root.querySelector<HTMLVideoElement>('.step-card.active video, video.assembly-clip');
+  activeVideo?.pause();
 }
 
 function b64ToBytes(b64: string): Uint8Array {
@@ -232,10 +247,12 @@ function yIn(el: HTMLElement, scroller: HTMLElement): number {
 /** Instant jump in `.content`. Smooth scrollIntoView dies after iOS zoom. */
 export function scrollLukeSection(raw: string) {
   const id = sectionId(raw);
+  const event = new CustomEvent('luke-show-step', { detail: { id } });
+  window.dispatchEvent(event);
   const el = document.getElementById(id);
   if (!el) return id;
   const scroller = document.querySelector('.content') as HTMLElement | null;
-  if (scroller) {
+  if (scroller && scroller.scrollHeight > scroller.clientHeight) {
     const chat = document.getElementById('askLuke');
     const pad = chat ? chat.offsetHeight : 0;
     scroller.scrollTop = Math.max(0, yIn(el, scroller) - pad);
@@ -266,9 +283,14 @@ export class LukeLive {
   private userId = lukeUserId();
   private boot: Promise<boolean> | null = null;
   private lastError = '';
+  private currentStepIndex = 0;
 
   constructor(ui: LiveUi) {
     this.ui = ui;
+  }
+
+  get isReady(): boolean {
+    return this.ready;
   }
 
   private get ready() {
@@ -434,12 +456,22 @@ export class LukeLive {
       return;
     }
     if (msg.setupComplete) {
-      this.sendJson({
-        clientContent: {
-          turns: [{ role: 'user', parts: [{ text: GREETING_NUDGE }] }],
-          turnComplete: true,
-        },
-      });
+      if (this.currentStepIndex > 0) {
+        const prompt = `Continue immediately with step ${this.currentStepIndex}. (Currently looking at: ${this.ui.getStep()}). Explain this step now to guide the builder.`;
+        this.sendJson({
+          clientContent: {
+            turns: [{ role: 'user', parts: [{ text: prompt }] }],
+            turnComplete: true,
+          },
+        });
+      } else {
+        this.sendJson({
+          clientContent: {
+            turns: [{ role: 'user', parts: [{ text: GREETING_NUDGE }] }],
+            turnComplete: true,
+          },
+        });
+      }
       return;
     }
     if (msg.toolCall) {
@@ -550,13 +582,7 @@ export class LukeLive {
       const section = args?.section || '';
       let id = '';
       if (fc.name === 'show_section') {
-        if (!this.started) {
-          id = 'stay-at-top';
-        } else if (this.autoQueue.length) {
-          id = 'auto-sequence';
-        } else {
-          id = scrollLukeSection(section);
-        }
+        id = scrollLukeSection(section);
       }
       replies.push({
         name: fc.name || 'show_section',
@@ -567,10 +593,40 @@ export class LukeLive {
     this.sendJson({ toolResponse: { functionResponses: replies } });
   }
 
-  private beginStartFlow() {
-    if (this.started && this.autoQueue.length) return;
+  speakStep(
+    stepNum: number,
+    meta: { id: string; name: string; label: string; dataStep: string },
+    fallbackScript?: string,
+  ) {
+    this.currentStepIndex = stepNum;
     this.started = true;
-    this.autoQueue = ['1', '2'];
+    this.stopPlayback();
+    if (!this.ready) {
+      if (fallbackScript) {
+        this.ui.log('luke', fallbackScript, false);
+        this.ui.endTurn();
+      }
+      return;
+    }
+    const stepDesc = stepNum === 0 ? 'the parts overview' : `step ${stepNum}: ${meta.name}`;
+    const prompt = `Continue immediately with ${stepDesc}. (Currently looking at: ${meta.dataStep}). Explain this step now to guide the builder.`;
+    this.sendJson({
+      clientContent: {
+        turns: [
+          {
+            role: 'user',
+            parts: [{ text: prompt }],
+          },
+        ],
+        turnComplete: true,
+      },
+    });
+  }
+
+  private beginStartFlow() {
+    if (this.started) return;
+    this.started = true;
+    this.autoQueue = [];
     this.autoShownAt = Date.now();
     this.advancing = false;
     scrollLukeSection('overview');
@@ -705,7 +761,7 @@ export class LukeLive {
     this.pcmOut.pushPcm16(b64ToBytes(b64), rate || 24000);
   }
 
-  private stopPlayback() {
+  stopPlayback() {
     this.pcmOut?.clear();
   }
 
@@ -740,10 +796,14 @@ export class LukeLive {
     ['overview', 'luke-overview'],
     ['1', 'luke-step-1'],
     ['luke-step-12', 'luke-step-12'],
-    ['15', 'luke-step-15'],
-    ['luke-step-15', 'luke-step-15'],
-    ['poweron', 'poweron'],
-    ['#poweron', 'poweron'],
+    ['12', 'luke-step-12'],
+    ['poweron', 'luke-step-13'],
+    ['#poweron', 'luke-step-13'],
+    ['13', 'luke-step-13'],
+    ['14', 'luke-step-14'],
+    ['wifi', 'luke-step-14'],
+    ['16', 'luke-step-13'],
+    ['17', 'luke-step-14'],
   ];
   for (const [raw, id] of cases) {
     if (sectionId(raw) !== id) throw new Error(`sectionId(${raw})`);

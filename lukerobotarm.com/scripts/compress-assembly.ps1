@@ -7,7 +7,8 @@ $Ffprobe = 'C:\code\ffmpeg-8.1.1-full_build-shared\bin\ffprobe.exe'
 $SrcDir = 'G:\Shared drives\Luke\RawImages\Assembly\Animation'
 $OutDir = Join-Path (Split-Path -Parent $PSScriptRoot) 'public'
 $DetectVf = "scale=iw/4:ih/4,gblur=sigma=1,lutyuv=y='if(gte(val,230),0,255)',cropdetect=24:2:0"
-$MaxKb = 400
+$MaxKb = 500
+$TargetSec = 8
 # Per-clip square X (source px). 13 = gripper insert: keep the gripper on the left.
 $XOverride = @{ 13 = 800 }
 
@@ -58,9 +59,14 @@ $total = 0
   $jpg = Join-Path $OutDir "Assembly$id.jpg"
   if (-not (Test-Path -LiteralPath $src)) { throw "missing $src" }
 
-  $wh = (& $Ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 $src).Split(',')
+  $wh = (& $Ffprobe -v error -select_streams v:0 -show_entries stream=width,height,duration -of csv=p=0 $src).Split(',')
   $iw = [int]$wh[0]
   $ih = [int]$wh[1]
+  $dur = 0.0
+  [void][double]::TryParse((& $Ffprobe -v error -show_entries format=duration -of csv=p=0 $src), [Globalization.NumberStyles]::Float, [Globalization.CultureInfo]::InvariantCulture, [ref]$dur)
+  if ($dur -lt 0.4) { $dur = 0.4 }
+  $factor = if ($dur -ge 6) { 1 } else { $TargetSec / $dur }
+  $factorStr = $factor.ToString('0.###', [Globalization.CultureInfo]::InvariantCulture)
   $crop = Get-XCrop $src $iw
   # Inner square: full source height, no pad. Center the square on the CAD in X.
   $side = Even $ih
@@ -70,9 +76,10 @@ $total = 0
   if ($XOverride.ContainsKey($n)) { $x = Even ([int]$XOverride[$n]) }
   if ($x -lt 0) { $x = 0 }
   if ($x + $side -gt $iw) { $x = Even ($iw - $side) }
-  $vf = "crop=${side}:${side}:${x}:0,scale=720:720:flags=lanczos,mpdecimate,fps=12"
+  # Stretch short clips to ~8s. Keep 12fps (6fps is a slideshow). No minterpolate — it ghosts CAD.
+  $vf = "crop=${side}:${side}:${x}:0,scale=720:720:flags=lanczos,setpts=${factorStr}*PTS,fps=12"
 
-  Write-Host "Assembly$id  $($iw)x$ih  content x=$($crop.X)+$($crop.W)  square $side @ $x"
+  Write-Host "Assembly$id  $($iw)x$ih  $($dur.ToString('0.00'))s x$factorStr  square $side @ $x"
   & $Ffmpeg -y -hide_banner -loglevel error -i $src -an -vf $vf `
     -c:v libx264 -pix_fmt yuv420p -profile:v baseline -level 3.1 `
     -crf 30 -preset slow -tune stillimage -movflags +faststart $mp4
