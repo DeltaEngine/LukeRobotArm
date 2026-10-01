@@ -1,4 +1,5 @@
 import './style.css';
+import './install';
 import { loadCatalog } from './catalog';
 import Overview from './pages/Overview';
 import Control from './pages/Control';

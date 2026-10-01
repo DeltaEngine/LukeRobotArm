@@ -532,6 +532,8 @@ body:has(.assembly-page) .content {
   margin-bottom: 1.25rem;
 }
 
+.cta-button[hidden] { display: none; }
+
 .cta-button {
   display: inline-block;
   margin-top: 0.5rem;
@@ -541,6 +543,8 @@ body:has(.assembly-page) .content {
   border-radius: 6px;
   text-decoration: none !important;
   font-weight: 700;
+  font-size: inherit;
+  font-family: inherit;
   border: none;
   cursor: pointer;
 }

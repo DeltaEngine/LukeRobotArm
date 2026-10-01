@@ -1,4 +1,5 @@
 import { defineConfig, loadEnv } from 'vite';
+import { VitePWA } from 'vite-plugin-pwa';
 import { handleLukeRequest, isLukeApi } from './server/luke-chat.mjs';
 import { handleCatalogRequest, isCatalogApi } from './server/prices.mjs';
 
@@ -84,6 +85,27 @@ export default defineConfig(({ mode }) => {
   const mongoUrl = env.LUKE_MONGO_URL || process.env.LUKE_MONGO_URL || '';
   const debug = mode !== 'production';
   return {
-    plugins: [lukeChatPlugin(apiKey, debug, mongoUrl)],
+    plugins: [lukeChatPlugin(apiKey, debug, mongoUrl), VitePWA({
+      // Activate updates after existing windows close; never reload during robot control.
+      registerType: 'prompt',
+      includeAssets: ['favicon.ico', 'app-icon-180.png'],
+      manifest: {
+        id: '/', name: 'Luke Robot Arm', short_name: 'Luke',
+        description: 'Control your Luke Robot Arm from your phone or laptop.',
+        start_url: '/#overview', scope: '/', display: 'standalone',
+        theme_color: '#1a1a1a', background_color: '#1a1a1a',
+        icons: [
+          { src: '/app-icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+          { src: '/app-icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+          { src: '/app-icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+        ],
+      },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,png,jpg,svg,ico,wasm}'],
+        navigateFallbackDenylist: [/^\/api(?:\/|$)/, /^\/ws(?:\/|$)/],
+        // APIs and robot traffic stay network-only; videos are too large to precache.
+        runtimeCaching: [],
+      },
+    })],
   };
 });
